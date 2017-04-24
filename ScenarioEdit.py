@@ -14,10 +14,15 @@ class Floor:
         glBegin(GL_LINE_LOOP)
         for element in self.lista:
             glVertex3f(element[0], 700-element[1]*1.37, 0)
+            #FIXME hay que tunear la Y del ratón por que la imagen está achatada
+        #     con la X no pasa.
         glEnd()
 
     def add(self, point):
         self.lista.append(point)
+
+    def getPoints(self):
+        return self.lista
 
 
 

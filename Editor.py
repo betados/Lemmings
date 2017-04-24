@@ -46,7 +46,20 @@ while not done:
     # if teclas[pygame.K_a]:
     #     # y=y+0.2
     #     avance = avance[0], avance[1]+1
-    # if teclas[pygame.K_s]:
+
+    #SAVE
+    if teclas[pygame.K_s]:
+        print("s")
+        import xml.etree.cElementTree as ET
+
+        root = ET.Element("floor")
+        points = ET.SubElement(root, "points")
+        for i,point in enumerate(scenario.getFloor().getPoints()):
+            ET.SubElement(points, "point", number=str(i)).text = str(point)
+        tree = ET.ElementTree(root)
+        tree.write("output.xml")
+
+
     #     # x=x-0.2
     #     avance = avance[0]-1, avance[1]
     # if teclas[pygame.K_d]:
