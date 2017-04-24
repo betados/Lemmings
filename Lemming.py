@@ -1,9 +1,21 @@
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+class LemmingList:
+    lista = []
+    def __init__(self,quantity):
+        for i in range(quantity):
+            lemming = Lemming(i)
+            self.lista.append(lemming)
+    def draw(self,t):
+        for lemming in self.lista:
+            lemming.draw(t)
+    def getList(self):
+        return self.lista
+
 class Lemming:
-    def __init__(self):
-        self.pos = 60, 400
+    def __init__(self,index):
+        self.pos = 60, 400+index*100
         self.alto = 30
         self.ancho = 8
 
@@ -15,10 +27,10 @@ class Lemming:
         self.color = 0.1, 0, 0
         glColor3fv(self.color)
         glBegin(GL_POLYGON)
-        glVertex2f(self.pos[0],self.pos[1])
-        glVertex2f(self.pos[0]+self.ancho,self.pos[1])
-        glVertex2f(self.pos[0]+self.ancho,self.pos[1]+self.alto)
-        glVertex2f(self.pos[0],self.pos[1]+self.alto)
+        glVertex2f(self.pos[0], self.pos[1])
+        glVertex2f(self.pos[0]+self.ancho, self.pos[1])
+        glVertex2f(self.pos[0]+self.ancho, self.pos[1]+self.alto)
+        glVertex2f(self.pos[0], self.pos[1]+self.alto)
         glEnd()
 
     def getPos(self):

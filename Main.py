@@ -7,7 +7,7 @@ if sys.platform == 'win32' or sys.platform == 'win64':
     os.environ['SDL_VIDEO_CENTERED'] = '1'
 import GL
 from Scenario import Scenario
-from Lemming import Lemming
+from Lemming import LemmingList
 from Interaction import Interaction
 
 pygame.init()
@@ -16,7 +16,7 @@ reloj = pygame.time.Clock()
 
 size = (800, 600)
 scenario = Scenario(size)
-lemming = Lemming()
+lemmingList = LemmingList(10)
 interaction = Interaction()
 pygame.display.set_caption('Lemmings')
 pygame.display.set_mode(size, OPENGL|DOUBLEBUF)
@@ -67,8 +67,8 @@ while not done:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glDisable(GL_LIGHTING)
     scenario.draw()
-    interaction.isOver(lemming, scenario.getFloor())
-    lemming.draw(t)
+    interaction.isOver(lemmingList, scenario.getFloor())
+    lemmingList.draw(t)
     glEnable(GL_LIGHTING)
     glFlush()
 
