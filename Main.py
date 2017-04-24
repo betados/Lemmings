@@ -13,12 +13,10 @@ pygame.init()
 reloj = pygame.time.Clock()
 
 
-
-
 size = (800, 600)
 scenario = Scenario(size)
 lemming = Lemming()
-pygame.display.set_caption('Le')
+pygame.display.set_caption('Lemmings')
 pygame.display.set_mode(size, OPENGL|DOUBLEBUF)
 GL.resize(size)
 GL.init(size)
@@ -37,20 +35,20 @@ while not done:
 
 
     # --- LA LÓGICA DEL JUEGO DEBERÍA IR AQUÍ
-    avance = 0, 0
     teclas = pygame.key.get_pressed()
-    if teclas[pygame.K_w]:
-        # x=x+0.2
-        avance = avance[0]+1, avance[1]
-    if teclas[pygame.K_a]:
-        # y=y+0.2
-        avance = avance[0], avance[1]+1
-    if teclas[pygame.K_s]:
-        # x=x-0.2
-        avance = avance[0]-1, avance[1]
-    if teclas[pygame.K_d]:
-        # y=y-0.2
-        avance = avance[0], avance[1]-1
+
+    # if teclas[pygame.K_w]:
+    #     # x=x+0.2
+    #     avance = avance[0]+1, avance[1]
+    # if teclas[pygame.K_a]:
+    #     # y=y+0.2
+    #     avance = avance[0], avance[1]+1
+    # if teclas[pygame.K_s]:
+    #     # x=x-0.2
+    #     avance = avance[0]-1, avance[1]
+    # if teclas[pygame.K_d]:
+    #     # y=y-0.2
+    #     avance = avance[0], avance[1]-1
 
     # para sair
     if teclas[pygame.K_ESCAPE]:
@@ -58,26 +56,6 @@ while not done:
 
     t=reloj.get_time()
     # print(t)
-
-
-
-    # posicion y orientacion de la cámara
-    # glMatrixMode(GL_PROJECTION);
-    # glLoadIdentity()
-    # gluPerspective(90, 1, 0.01, 1000)
-
-    #
-    # if primeraPersona:
-    #     """PRIMERA PERSONA"""
-    #     gluLookAt(personaje.getPos()[0], personaje.getPos()[1], matriz.getZ(),  # pos
-    #               personaje.getMirada()[0], personaje.getMirada()[1], personaje.getMirada()[2],  # hacia donde mira
-    #               0, 0, 1)  # eje vertical
-    # else:
-    #     """TERCERA PERSONA"""
-    #     gluLookAt(personaje.getPos()[0], personaje.getPos()[1], matriz.getZ()*8,  # pos
-    #               personaje.getPos()[0]+1, personaje.getPos()[1], 0,  # hacia donde mira
-    #                   0, 0, 1)  # eje vertical
-
 
 
     # --- EL CÓDIGO DE DIBUJO DEBERÍA IR AQUÍ
@@ -91,18 +69,6 @@ while not done:
     glEnable(GL_LIGHTING)
     glFlush()
 
-
-    # use the texture
-    # vertices & texture data
-
-
-
-
-
-
-    # print(reloj.get_time())
-    # listaGranos.actualiza(reloj.get_time())
-    # listaGranos.dibuja()
 
     # --- Avanzamos y actualizamos la pantalla con lo que hemos dibujado.
 
