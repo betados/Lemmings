@@ -79,7 +79,7 @@ while not done:
 
     # --- Limitamos a 60 fotogramas por segundo (frames per second)
     # print("iteracion")
-    reloj.tick(10)
+    reloj.tick(30)
 
 # Cerramos la ventana y salimos.
 # Si te olvidas de esta última línea, el programa se 'colgará'

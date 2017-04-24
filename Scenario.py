@@ -32,7 +32,7 @@ class Scenario:
         return self.floor
 
     def draw(self):
-        color = 0, 0, 0.2
+        color = 0, 0, 1
         glColor3fv(color)
         # glBegin(GL_POLYGON)
         # glVertex3f(10, 10, 0)

@@ -23,7 +23,7 @@ GL.resize(size)
 GL.init(size)
 
 done = False
-
+previousPosition = -9999, -9999
 
 while not done:
 
@@ -32,10 +32,19 @@ while not done:
         if evento.type == pygame.QUIT:
             done = True
         if evento.type == pygame.MOUSEBUTTONDOWN:
-           pass
+           scenario.newFloor()
+        if evento.type == pygame.MOUSEBUTTONUP:
+            pass
+           # scenario.addFloor()
 
     if pygame.mouse.get_pressed()[0] == 1:
-        scenario.add(pygame.mouse.get_pos())
+        movimiento = pygame.mouse.get_rel()
+        position = pygame.mouse.get_pos()
+        # print(movimiento)
+        if movimiento[0] != 0 or movimiento[1] != 0:
+            # print("hay movimiento")
+            scenario.add(position)
+            previousPosition= position
 
     # --- LA LÓGICA DEL JUEGO DEBERÍA IR AQUÍ
     teclas = pygame.key.get_pressed()
@@ -49,15 +58,7 @@ while not done:
 
     #SAVE
     if teclas[pygame.K_s]:
-        print("s")
-        import xml.etree.cElementTree as ET
-
-        root = ET.Element("floor")
-        points = ET.SubElement(root, "points")
-        for i,point in enumerate(scenario.getFloor().getPoints()):
-            ET.SubElement(points, "point", number=str(i)).text = str(point)
-        tree = ET.ElementTree(root)
-        tree.write("output.xml")
+        scenario.save()
 
 
     #     # x=x-0.2
@@ -91,7 +92,7 @@ while not done:
 
     # --- Limitamos a 60 fotogramas por segundo (frames per second)
     # print("iteracion")
-    reloj.tick(10)
+    reloj.tick(20)
 
 # Cerramos la ventana y salimos.
 # Si te olvidas de esta última línea, el programa se 'colgará'
