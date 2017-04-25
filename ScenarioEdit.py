@@ -1,6 +1,8 @@
 
 import math, random
-import pygame
+import pygame, eztext
+
+
 
 class Floor:
 
@@ -57,6 +59,10 @@ class Scenario:
 
     def save(self):
         print("s")
+
+        # txtbx = eztext.Input(maxlength=45, color=(255, 0, 0), prompt='type here: ')
+
+
         import xml.etree.cElementTree as ET
 
         root = ET.Element("root")
