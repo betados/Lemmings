@@ -5,11 +5,11 @@ import math, random
 
 class Floor:
 
-    pointList = []
-
     def __init__(self):
+        self.pointList = []
         self.lastPoint = -9999, -9999
         self.color = random.randrange(256) / 255, random.randrange(256) / 255, random.randrange(256) / 255
+        self.color = random.randrange(256) / 600, random.randrange(256) / 600, random.randrange(256) / 600
         print (self.color)
 
     def draw(self):
@@ -41,7 +41,6 @@ class Scenario:
 
     floorList = []
 
-
     def __init__(self, res):
         self.size = res
         self.index = -1
@@ -63,19 +62,20 @@ class Scenario:
         print("s")
         import xml.etree.cElementTree as ET
 
-        root = ET.Element("floor")
-        for i, floor in enumerate(self.floorList):
-            ET.Element(root, floor, number=str(i)).text = str(floor)
-            points = ET.SubElement(root, "points")
-            for j, point in enumerate(floor.getPoints()):
-                ET.SubElement(points, "point", number=str(j)).text = str(point)
+        root = ET.Element("root")
+
+        for i,floors in enumerate(self.floorList):
+            floor = ET.SubElement(root, "Floor")
+            for j,point in enumerate(floors.getPoints()):
+                ET.SubElement(floor, "Point", number=str(j)).text = str(point)
+
         tree = ET.ElementTree(root)
         tree.write("output.xml")
 
 
 
     def draw(self):
-        color = 0, 0, 1
+        color = 0, 0, 0.3
         glColor3fv(color)
         # glBegin(GL_POLYGON)
         # glVertex3f(10, 10, 0)
