@@ -1,33 +1,30 @@
-from OpenGL.GL import *
-from OpenGL.GLU import *
-import math, random
 
+import math, random
+import pygame
 
 class Floor:
 
     def __init__(self):
         self.pointList = []
         self.lastPoint = -9999, -9999
-        self.color = random.randrange(256) / 255, random.randrange(256) / 255, random.randrange(256) / 255
+        # self.color = random.randrange(256) / 255, random.randrange(256) / 255, random.randrange(256) / 255
         self.color = random.randrange(256) / 600, random.randrange(256) / 600, random.randrange(256) / 600
-        print (self.color)
+        # print (self.color)
 
-    def draw(self):
-        glColor3fv(self.color)
-        glBegin(GL_LINE_LOOP)
-        for element in self.pointList:
-            glVertex3f(element[0], 700-element[1]*1.37, 0)
-            #FIXME hay que tunear la Y del ratón por que la imagen está achatada con la X no pasa.
-        glEnd()
-        glFlush()
+    def draw(self, screen):
+
+        # print("dibuja")
+        # rect2 = pygame.draw.rect(screen,(255,255,255), (100, 20, 60, 60), 3)  # not filled
+        if len(self.pointList) > 2:
+            poly1 = pygame.draw.polygon(screen, (255,255,255), self.pointList, 0)  # filled
 
 
     def getPoints(self):
         return self.pointList
 
-    def distance(self,pointP, pointQ):
-        distance = math.sqrt(math.pow(pointQ[0] - pointP[0], 2) + math.pow(pointQ[1] - pointP[1], 2))
-        return distance
+    def getDistance(self,pointP, pointQ):
+        dist = math.sqrt(math.pow(pointQ[0] - pointP[0], 2) + math.pow(pointQ[1] - pointP[1], 2))
+        return dist
 
     def add(self, point):
         # print(point)
@@ -74,9 +71,9 @@ class Scenario:
 
 
 
-    def draw(self):
+    def draw(self,screen):
         color = 0, 0, 0.3
-        glColor3fv(color)
+
         # glBegin(GL_POLYGON)
         # glVertex3f(10, 10, 0)
         # glVertex3f(2, 1, 0)
@@ -84,18 +81,17 @@ class Scenario:
         # glVertex3f(1, 2, 0)
         # glEnd()
 
-        # FRAME
-        glBegin(GL_LINE_LOOP)
-        glVertex3f(0,               0, 0)
-        glVertex3f(self.size[0],    0, 0)
-        glVertex3f(self.size[0],    self.size[1], 0)
-        glVertex3f(0,               self.size[1], 0)
-        glEnd()
+        # # FRAME
+        # glBegin(GL_LINE_LOOP)
+        # glVertex3f(0,               0, 0)
+        # glVertex3f(self.size[0],    0, 0)
+        # glVertex3f(self.size[0],    self.size[1], 0)
+        # glVertex3f(0,               self.size[1], 0)
+        # glEnd()
 
+        # FLOORS
         for floor in self.floorList:
-            print(floor)
-            floor.draw()
-        print("___________")
+            floor.draw(screen)
 
 
 
