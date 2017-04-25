@@ -9,10 +9,10 @@ pygame.init()
 reloj = pygame.time.Clock()
 
 
-size = (800, 600)
-scenario = Scenario(size)
+resolution = (800, 600)
+scenario = Scenario(resolution)
 pygame.display.set_caption('Lemmings map editor')
-screen = pygame.display.set_mode(size)
+screen = pygame.display.set_mode(resolution)
 
 
 WHITE = 100, 100, 100
@@ -27,7 +27,9 @@ text = eztext.Input(maxlength=45, color=(100, 0, 0), prompt='Scenario name: ')
 
 while not done:
 
+    screen.fill((0, 0, 0))
     events = pygame.event.get()
+    teclas = pygame.key.get_pressed()
     if state == "drawing":
         # --- Bucle principal de eventos
 
@@ -52,7 +54,7 @@ while not done:
                 previousPosition= position
 
         # --- LA LÓGICA DEL JUEGO DEBERÍA IR AQUÍ
-        teclas = pygame.key.get_pressed()
+
 
         # if teclas[pygame.K_w]:
         #     # x=x+0.2
@@ -67,32 +69,40 @@ while not done:
 
         #SAVE
         if teclas[pygame.K_s]:
+            events = 0
             state = "saving"
             text = eztext.Input(maxlength=45, color=(150, 0, 0), prompt='Scenario name: ')
 
+        # TEXT
+        size = 20
+        myfont = pygame.font.SysFont("calibri", size)
+        # render text
+        label = myfont.render("To save press \"s\"", 1, (0, 100, 255))
+        screen.blit(label, (resolution[0] / 50, resolution[1] - size))
+        label = myfont.render("To exit press esc", 1, (0, 100, 255))
+        screen.blit(label, (resolution[0] / 50, resolution[1] - size * 2))
 
-
-        #     # x=x-0.2
-        #     avance = avance[0]-1, avance[1]
-        # if teclas[pygame.K_d]:
-        #     # y=y-0.2
-        #     avance = avance[0], avance[1]-1
-
-        # para sair
+        # to exit
         if teclas[pygame.K_ESCAPE]:
             done=True
 
-    screen.fill((0, 0, 0))
+
     scenario.draw(screen)
 
-    if state == "saving":
-
+    if state == "saving" and events != 0:
+        if teclas[pygame.K_RETURN] or teclas[K_KP_ENTER]:
+            scenario.save(text.getInput())
+            state = "drawing"
         text.update(events)
         text.draw(screen)
-        teclas = pygame.key.get_pressed()
-        if teclas[pygame.K_a]:
-            scenario.save()
-            state = "drawing"
+
+        # TEXT
+        size = 20
+        myfont = pygame.font.SysFont("calibri", size)
+        # render text
+        label = myfont.render("To save press enter", 1, (0, 100, 255))
+        screen.blit(label, (resolution[0] / 50, resolution[1] - size))
+
 
 
     # t=reloj.get_time()
@@ -113,7 +123,7 @@ while not done:
 
     # --- Limitamos a 60 fotogramas por segundo (frames per second)
     # print("iteracion")
-    reloj.tick(20)
+    reloj.tick(10)
 
 # Cerramos la ventana y salimos.
 # Si te olvidas de esta última línea, el programa se 'colgará'

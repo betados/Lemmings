@@ -41,7 +41,7 @@ class Scenario:
     floorList = []
 
     def __init__(self, res):
-        self.size = res
+        self.res = res
         self.index = -1
         # self.floor = Floor(res)
 
@@ -57,12 +57,7 @@ class Scenario:
     def add(self, point):
         self.floorList[self.index].add(point)
 
-    def save(self):
-        print("s")
-
-        # txtbx = eztext.Input(maxlength=45, color=(255, 0, 0), prompt='type here: ')
-
-
+    def save(self,name):
         import xml.etree.cElementTree as ET
 
         root = ET.Element("root")
@@ -73,38 +68,15 @@ class Scenario:
                 ET.SubElement(floor, "Point", number=str(j)).text = str(point)
 
         tree = ET.ElementTree(root)
-        tree.write("output.xml")
+        tree.write(str(name)+".xml")
 
 
 
     def draw(self,screen):
-        color = 0, 0, 0.3
-
-        # glBegin(GL_POLYGON)
-        # glVertex3f(10, 10, 0)
-        # glVertex3f(2, 1, 0)
-        # glVertex3f(2,2, 0)
-        # glVertex3f(1, 2, 0)
-        # glEnd()
-
-        # # FRAME
-        # glBegin(GL_LINE_LOOP)
-        # glVertex3f(0,               0, 0)
-        # glVertex3f(self.size[0],    0, 0)
-        # glVertex3f(self.size[0],    self.size[1], 0)
-        # glVertex3f(0,               self.size[1], 0)
-        # glEnd()
+        color = 0, 0, 1
 
         # FLOORS
         for floor in self.floorList:
             floor.draw(screen)
 
 
-
-        #
-        # glBegin(GL_LINE_LOOP)
-        # glVertex3f(400, 400, 0)
-        # glVertex3f(590, 400, 0)
-        # glVertex3f(590, 590, 0)
-        # glVertex3f(400, 590, 0)
-        # glEnd()
