@@ -26,7 +26,7 @@ class Lemming:
 
         self.color = 30, 0, 0
 
-        pygame.draw.rect(screen, self.color, (self.pos[0],  self.pos[1]-+self.alto, self.ancho, self.alto),6)
+        pygame.draw.rect(screen, self.color, (self.pos[0],  self.pos[1], self.ancho, self.alto),6)
 
 
 
