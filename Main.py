@@ -1,11 +1,10 @@
-from OpenGL.GL import *
-from OpenGL.GLU import *
+
 import os, sys, math, random
 import pygame
 from pygame.locals import *
 if sys.platform == 'win32' or sys.platform == 'win64':
     os.environ['SDL_VIDEO_CENTERED'] = '1'
-import GL
+
 from Scenario import Scenario
 from Lemming import LemmingList
 from Interaction import Interaction
@@ -14,25 +13,27 @@ pygame.init()
 reloj = pygame.time.Clock()
 
 
-size = (800, 600)
-scenario = Scenario(size)
+resolution = (800, 600)
+scenario = Scenario(resolution)
 lemmingList = LemmingList(10)
 interaction = Interaction()
 pygame.display.set_caption('Lemmings')
-pygame.display.set_mode(size, OPENGL|DOUBLEBUF)
-GL.resize(size)
-GL.init(size)
+screen = pygame.display.set_mode(resolution)
 
 done = False
 
 
 while not done:
 
+    screen.fill((0, 0, 0))
+    events = pygame.event.get()
+    teclas = pygame.key.get_pressed()
+
     # --- Bucle principal de eventos
-    for evento in pygame.event.get():
-        if evento.type == pygame.QUIT:
+    for event in events:
+        if event.type == pygame.QUIT:
             done = True
-        if evento.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN:
             pass
 
 
@@ -63,14 +64,9 @@ while not done:
     # --- EL CÓDIGO DE DIBUJO DEBERÍA IR AQUÍ
 
     # borra lo anterior
-    glClearColor(0.0, 0.0, 0.0, 1)
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    glDisable(GL_LIGHTING)
-    scenario.draw()
+    scenario.draw(screen)
     interaction.isOver(lemmingList, scenario.getFloor())
-    lemmingList.draw(t)
-    glEnable(GL_LIGHTING)
-    glFlush()
+    lemmingList.draw(t, screen)
 
 
     # --- Avanzamos y actualizamos la pantalla con lo que hemos dibujado.
