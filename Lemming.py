@@ -1,8 +1,9 @@
 import pygame
 
 class LemmingList:
-    lista = []
+
     def __init__(self,quantity):
+        self.lista = []
         for i in range(quantity):
             lemming = Lemming(i)
             self.lista.append(lemming)
@@ -14,7 +15,7 @@ class LemmingList:
 
 class Lemming:
     def __init__(self,index):
-        self.pos = 60, index*100
+        self.pos = 60, (index-10)*100
         self.alto = 30
         self.ancho = 8
 
@@ -24,7 +25,7 @@ class Lemming:
         self.vel = self.vel[0] + 0.5 * self.accel[0] * t*t, self.vel[1] + 0.5 * self.accel[1] * t*t
         self.pos = self.pos[0] + self.vel[0]*t,  self.pos[1] + self.vel[1]*t
 
-        self.color = 30, 0, 0
+        self.color = 50, 0, 0
 
         pygame.draw.rect(screen, self.color, (self.pos[0],  self.pos[1], self.ancho, self.alto),6)
 

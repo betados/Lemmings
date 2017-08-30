@@ -3,14 +3,25 @@ import pygame
 
 class Floor:
 
-    def __init__(self,size):
-        self.start = (50, size[1] *0.9)
-        self.end = (size[0] -50, size[1] *0.9)
-        self.color = 0,0,50
+    def __init__(self, size, font=None):
+        self.start = (50, size[1] * 0.7)
+        self.end = (size[0] - 500, size[1] * 0.1)
+        self.color = 0, 0, 50
+
+        if font is None:
+            self.pointList = []
+            a = (self.end[1]-self.start[1])/(self.end[0]-self.start[0])
+            for x in range (self.start[0], self.end[0]):
+                y = a*(x-self.start[0])+self.start[1]
+                self.pointList.append([x, y])
+        else:
+            import yaml
+
 
     def draw(self, screen):
-        line = pygame.draw.line(screen, self.color, self.start, self.end, 2)
+        # line = pygame.draw.line(screen, self.color, self.start, self.end, 1)
 
+        pygame.draw.polygon(screen, self.color, self.pointList, 1)
 
 
     def getInit(self):
@@ -23,9 +34,9 @@ class Floor:
 
 class Scenario:
 
-    def __init__(self, res):
+    def __init__(self, res, font = None):
         self.size = res
-        self.floor = Floor(res)
+        self.floor = Floor(res, font)
 
     def getFloor(self):
         return self.floor

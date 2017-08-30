@@ -59,6 +59,7 @@ class Scenario:
 
     def save(self,name):
         import xml.etree.cElementTree as ET
+        import yaml
 
         root = ET.Element("root")
 
@@ -70,7 +71,13 @@ class Scenario:
         tree = ET.ElementTree(root)
         tree.write(str(name)+".xml")
 
-
+        for floor in self.floorList:
+            yaml.dump(floor.pointList, open(name + '.yaml', 'w'))
+        # yaml.dump("Diccionario de suelos", open(name + '.yaml', 'w'))
+        # floorDict = {}
+        # for i, floor in enumerate(self.floorList):
+        #     floorDict[i] = floor.pointList
+        # yaml.dump(floorDict, open(name + '.yaml', 'a'))
 
     def draw(self,screen):
         color = 0, 0, 1
