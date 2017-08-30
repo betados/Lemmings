@@ -15,7 +15,7 @@ class LemmingList:
 
 class Lemming:
     def __init__(self,index):
-        self.pos = 60, (index-10)*100
+        self.pos = 10, (index-10)*100
         self.alto = 30
         self.ancho = 8
 

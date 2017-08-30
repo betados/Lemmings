@@ -6,7 +6,7 @@ class Floor:
     def __init__(self, size, font=None):
         self.start = (50, size[1] * 0.7)
         self.end = (size[0] - 500, size[1] * 0.1)
-        self.color = 0, 0, 50
+        self.color = 0, 0, 255
 
         if font is None:
             self.pointList = []
@@ -16,6 +16,8 @@ class Floor:
                 self.pointList.append([x, y])
         else:
             import yaml
+            self.pointList = yaml.load(open(font))
+            print(self.pointList)
 
 
     def draw(self, screen):

@@ -14,7 +14,7 @@ reloj = pygame.time.Clock()
 
 
 resolution = (800, 600)
-scenario = Scenario(resolution)
+scenario = Scenario(resolution, "a.yaml")
 lemmingList = LemmingList(10)
 interaction = Interaction()
 pygame.display.set_caption('Lemmings')

@@ -13,7 +13,6 @@ class Interaction:
 
     def camina(self, lemmingList, floor):
 
-
         for lemming in lemmingList.lista:
             distanceMin = 9999
             nearestPoint = None
@@ -32,7 +31,7 @@ class Interaction:
                     nextPoint = [nearestPoint[0]+1, nearestPoint[1]]
 
                 # is near enought and above
-                if distanceMin <= lemming.alto and abs(lemming.pos[0]) - abs(nearestPoint[0]) < 1:
+                if distanceMin <= lemming.alto and abs(lemming.pos[0]) - abs(nearestPoint[0]) < 2:
                     lemming.vel = (nextPoint[0]-nearestPoint[0])*0.03, (nextPoint[1]-nearestPoint[1])*0.03
                     # print(lemming.vel)
                     # lemming.vel = 0.03, 0

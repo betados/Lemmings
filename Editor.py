@@ -51,19 +51,12 @@ while not done:
             if movimiento[0] != 0 or movimiento[1] != 0:
                 # print(position)
                 scenario.add(position)
-                previousPosition= position
+                previousPosition = position
 
         # --- LA LÓGICA DEL JUEGO DEBERÍA IR AQUÍ
 
 
-        # if teclas[pygame.K_w]:
-        #     # x=x+0.2
-        #     avance = avance[0]+1, avance[1]
-        if teclas[pygame.K_a]:
-            # draw a few rectangles
 
-            rect1 = pygame.draw.rect(screen, WHITE, (20, 20, 60, 60), 0)  # filled = 0
-            rect2 = pygame.draw.rect(screen, WHITE, (100, 20, 60, 60), 3)  # not filled
         #     # y=y+0.2
         #     avance = avance[0], avance[1]+1
 
@@ -123,7 +116,7 @@ while not done:
 
     # --- Limitamos a 60 fotogramas por segundo (frames per second)
     # print("iteracion")
-    reloj.tick(10)
+    reloj.tick(500)
 
 # Cerramos la ventana y salimos.
 # Si te olvidas de esta última línea, el programa se 'colgará'
