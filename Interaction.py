@@ -2,6 +2,7 @@ import math
 
 class Interaction:
 
+    # @deprecated
     def check(self, lemmingList, floor):
         for lemming in lemmingList.getList():
             if lemming.getPos()[0] > floor.getInit()[0] and lemming.getPos()[0] < floor.getEnd()[0] and \
@@ -37,6 +38,21 @@ class Interaction:
                     # lemming.vel = 0.03, 0
                 else:
                     lemming.vel = 0, 0.1
+
+    def caminaRect(self, lemmingList, floor):
+        for lemming in lemmingList.lista:
+            for i, point in enumerate(floor.pointList):
+                if lemming.rect.collidepoint(point):
+                    nextPoint = floor.pointList[i + 1]
+                    lemming.vel = (nextPoint[0] - point[0]) * 0.03, (nextPoint[1] - point[1]) * 0.03
+                    break
+                else:
+                    lemming.vel = 0, 0.1
+            print(lemming.vel)
+
+
+
+
 
     def getDistance(self, pointP, pointQ):
         dist = math.sqrt(math.pow(pointQ[0] - pointP[0], 2) + math.pow(pointQ[1] - pointP[1], 2))

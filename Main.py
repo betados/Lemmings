@@ -65,7 +65,7 @@ while not done:
 
     # borra lo anterior
     scenario.draw(screen)
-    interaction.camina(lemmingList, scenario.getFloor())
+    interaction.caminaRect(lemmingList, scenario.getFloor())
     # interaction.check(lemmingList, scenario.getFloor())
     lemmingList.draw(t, screen)
 
