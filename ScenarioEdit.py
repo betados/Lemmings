@@ -38,11 +38,10 @@ class Floor:
 
 class Scenario:
 
-    floorList = []
-
     def __init__(self, res):
         self.res = res
         self.index = -1
+        self.floorList = []
         # self.floor = Floor(res)
 
     def newFloor(self):
@@ -71,13 +70,14 @@ class Scenario:
         tree = ET.ElementTree(root)
         tree.write(str(name)+".xml")
 
+        # yaml.dump(None, open(name + '.yaml', 'w'))
+        floorList_pointList = []
         for floor in self.floorList:
-            yaml.dump(floor.pointList, open(name + '.yaml', 'w'))
-        # yaml.dump("Diccionario de suelos", open(name + '.yaml', 'w'))
-        # floorDict = {}
-        # for i, floor in enumerate(self.floorList):
-        #     floorDict[i] = floor.pointList
-        # yaml.dump(floorDict, open(name + '.yaml', 'a'))
+            floorList_pointList.append("floor")
+            floorList_pointList.append(floor.pointList)
+
+        yaml.dump(floorList_pointList, open(name + '.yaml', 'w'))
+        print(floorList_pointList)
 
     def draw(self,screen):
         color = 0, 0, 1

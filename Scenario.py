@@ -3,36 +3,26 @@ import pygame
 
 class Floor:
 
-    def __init__(self, size, font=None):
+    def __init__(self, screen, size, pointList):
+        print(pointList)
         self.start = (50, size[1] * 0.7)
         self.end = (size[0] - 500, size[1] * 0.1)
         self.color = 0, 0, 255
         self.pointList = []
 
-        if font is None:
-            self.pointList = []
-            a = (self.end[1]-self.start[1])/(self.end[0]-self.start[0])
-            for x in range (self.start[0], self.end[0]):
-                y = a*(x-self.start[0])+self.start[1]
-                self.pointList.append([x, y])
-        else:
-            import yaml
-            pointList = yaml.load(open(font))
-            for i, point in enumerate(pointList):
-                self.pointList.append(point)
-                if i == len(pointList)-1:
-                    break
-                if (pointList[i+1][0] - point[0])>1:
+        # Rellena si faltan puntos.
+        for i, point in enumerate(pointList):
+            self.pointList.append(point)
+            if i < len(pointList)-1:
+                if (pointList[i+1][0] - point[0]) > 1:
                     for x in range(point[0]+1, pointList[i+1][0]):
-                        self.pointList.append((x,point[1]))
-            print(self.pointList)
+                        self.pointList.append((x, point[1]))
+        print(self.pointList)
 
+        self.screen = screen
 
-    def draw(self, screen):
-        # line = pygame.draw.line(screen, self.color, self.start, self.end, 1)
-
-        pygame.draw.polygon(screen, self.color, self.pointList, 1)
-
+    def draw(self):
+        pygame.draw.polygon(self.screen, self.color, self.pointList, 1)
 
     def getInit(self):
         return self.start
@@ -44,40 +34,29 @@ class Floor:
 
 class Scenario:
 
-    def __init__(self, res, font = None):
+    def __init__(self, screen, res, font=None):
         self.size = res
-        self.floor = Floor(res, font)
+        self.floorList = []
+        self.screen = screen
 
-    def getFloor(self):
-        return self.floor
+        if font is None:
+            pointList = []
+            a = (self.end[1]-self.start[1])/(self.end[0]-self.start[0])
+            for x in range(self.start[0], self.end[0]):
+                y = a*(x-self.start[0])+self.start[1]
+                pointList.append([x, y])
+            self.floorList.append(Floor(screen,res, pointList))
+        else:
+            import yaml
 
-    def draw(self,screen):
-        self.color = 0, 0, 1
-        # glColor3fv(color)
-        # glBegin(GL_POLYGON)
-        # glVertex3f(10, 10, 0)
-        # glVertex3f(2, 1, 0)
-        # glVertex3f(2,2, 0)
-        # glVertex3f(1, 2, 0)
-        # glEnd()
+            load = yaml.load(open(font))
+            for i, element in enumerate(load):
+                # print(element)
+                if i == len(load)-1:
+                    break
+                if element == "floor" and load[i+1] != "floor" and len(load[i+1])>2:
+                    self.floorList.append(Floor(screen, res, load[i+1]))
 
-        # FRAME
-        # glBegin(GL_LINE_LOOP)
-        # glVertex3f(0,               0, 0)
-        # glVertex3f(self.size[0],    0, 0)
-        # glVertex3f(self.size[0],    self.size[1], 0)
-        # glVertex3f(0,               self.size[1], 0)
-        # glEnd()
-
-        self.floor.draw(screen)
-        # pygame.draw.rect(screen,(255,255,255), (100, 100, 10, 10), 3)
-
-
-
-        #
-        # glBegin(GL_LINE_LOOP)
-        # glVertex3f(400, 400, 0)
-        # glVertex3f(590, 400, 0)
-        # glVertex3f(590, 590, 0)
-        # glVertex3f(400, 590, 0)
-        # glEnd()
+    def draw(self):
+        for floor in self.floorList:
+            floor.draw()

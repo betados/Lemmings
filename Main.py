@@ -1,4 +1,6 @@
 
+# -*- coding: utf-8 -*-
+
 import os, sys, math, random
 import pygame
 from pygame.locals import *
@@ -14,11 +16,13 @@ reloj = pygame.time.Clock()
 
 
 resolution = (800, 600)
-scenario = Scenario(resolution, "a.yaml")
-lemmingList = LemmingList(10)
-interaction = Interaction()
+
+
 pygame.display.set_caption('Lemmings')
 screen = pygame.display.set_mode(resolution)
+scenario = Scenario(screen, resolution, "a.yaml")
+lemmingList = LemmingList(10)
+interaction = Interaction()
 
 done = False
 
@@ -64,8 +68,8 @@ while not done:
     # --- EL CÓDIGO DE DIBUJO DEBERÍA IR AQUÍ
 
     # borra lo anterior
-    scenario.draw(screen)
-    interaction.caminaRect(lemmingList, scenario.getFloor())
+    scenario.draw()
+    interaction.caminaRect(lemmingList, scenario.floorList)
     # interaction.check(lemmingList, scenario.getFloor())
     lemmingList.draw(t, screen)
 
