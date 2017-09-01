@@ -9,6 +9,7 @@ class Floor:
         self.end = (size[0] - 500, size[1] * 0.1)
         self.color = 0, 0, 255
         self.pointList = []
+        self.sprite = Sprite()
 
         # Rellena si faltan puntos.
         for i, point in enumerate(pointList):
@@ -23,12 +24,20 @@ class Floor:
 
     def draw(self):
         pygame.draw.polygon(self.screen, self.color, self.pointList, 1)
+        for point in self.pointList:
+            if point[0] % 10 == 0:
+                self.screen.blit(self.sprite.image, (point[0],point[1],1,1), (900,10,15,15))
 
     def getInit(self):
         return self.start
 
     def getEnd(self):
         return self.end
+
+class Sprite(pygame.sprite.Sprite):
+    def __init__(self):
+        self.image = pygame.Surface([5, 5])
+        self.image = pygame.image.load("images/grass.png").convert()
 
 
 

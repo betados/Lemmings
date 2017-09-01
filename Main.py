@@ -20,7 +20,7 @@ resolution = (800, 600)
 
 pygame.display.set_caption('Lemmings')
 screen = pygame.display.set_mode(resolution)
-scenario = Scenario(screen, resolution, "a.yaml")
+scenario = Scenario(screen, resolution, "maps/a.yaml")
 lemmingList = LemmingList(10)
 interaction = Interaction()
 
@@ -80,7 +80,7 @@ while not done:
 
     # --- Limitamos a 60 fotogramas por segundo (frames per second)
     # print("iteracion")
-    reloj.tick(50)
+    reloj.tick(200)
 
 # Cerramos la ventana y salimos.
 # Si te olvidas de esta última línea, el programa se 'colgará'

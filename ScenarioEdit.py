@@ -3,7 +3,6 @@ import math, random
 import pygame, eztext
 
 
-
 class Floor:
 
     def __init__(self):
@@ -29,12 +28,7 @@ class Floor:
         return dist
 
     def add(self, point):
-        # print(point)
-        # if self.distance(point, self.lastPoint) > 5:
         self.pointList.append(point)
-        # self.lastPoint = point
-
-
 
 class Scenario:
 
@@ -49,38 +43,22 @@ class Scenario:
         self.floorList.append(Floor())
         self.index += 1
 
-    def getFloor(self):
-        pass
-        # return self.floor
-
     def add(self, point):
         self.floorList[self.index].add(point)
 
-    def save(self,name):
-        import xml.etree.cElementTree as ET
+    def save(self, name):
         import yaml
 
-        root = ET.Element("root")
-
-        for i,floors in enumerate(self.floorList):
-            floor = ET.SubElement(root, "Floor")
-            for j,point in enumerate(floors.getPoints()):
-                ET.SubElement(floor, "Point", number=str(j)).text = str(point)
-
-        tree = ET.ElementTree(root)
-        tree.write(str(name)+".xml")
-
-        # yaml.dump(None, open(name + '.yaml', 'w'))
         floorList_pointList = []
         for floor in self.floorList:
             floorList_pointList.append("floor")
             floorList_pointList.append(floor.pointList)
 
-        yaml.dump(floorList_pointList, open(name + '.yaml', 'w'))
-        print(floorList_pointList)
+        yaml.dump(floorList_pointList, open("maps/"+name + '.yaml', 'w'))
+        # print(floorList_pointList)
 
     def draw(self,screen):
-        color = 0, 0, 1
+        # color = 0, 0, 1
 
         # FLOORS
         for floor in self.floorList:

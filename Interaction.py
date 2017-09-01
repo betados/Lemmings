@@ -5,12 +5,13 @@ class Interaction:
     def caminaRect(self, lemmingList, floorList):
         for lemming in lemmingList.lista:
             for floor in floorList:
-                collision, point, nextPoint = self.collideList(lemming.pos, floor.pointList)
+                collision, point, nextPoint = self.collideList(lemming.knee, floor.pointList)
                 # TODO tener en cuenta la inclinacion para caer o no poder avanzar
                 if collision and nextPoint[0] >= point[0]:
                     lemming.vel = (nextPoint[0] - point[0]) * 0.03, (nextPoint[1] - point[1]) * 0.03
                     break;
                 else:
+                    pass
                     lemming.vel = 0, 0.1
                 # print("lemming.vel:",lemming.index, lemming.vel)
 
@@ -18,9 +19,11 @@ class Interaction:
         for index, point in enumerate(pointList):
             if index == len(pointList)-1:
                 break
-            if self.getDistance(pos, point) < 2:
+
+            if self.getDistance(pos, point) <= 6:
                 # print("colision")
                 return True, point, pointList[index+1]
+
         return False, None, None
 
 
