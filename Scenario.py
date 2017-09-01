@@ -7,6 +7,7 @@ class Floor:
         self.start = (50, size[1] * 0.7)
         self.end = (size[0] - 500, size[1] * 0.1)
         self.color = 0, 0, 255
+        self.pointList = []
 
         if font is None:
             self.pointList = []
@@ -16,7 +17,14 @@ class Floor:
                 self.pointList.append([x, y])
         else:
             import yaml
-            self.pointList = yaml.load(open(font))
+            pointList = yaml.load(open(font))
+            for i, point in enumerate(pointList):
+                self.pointList.append(point)
+                if i == len(pointList)-1:
+                    break
+                if (pointList[i+1][0] - point[0])>1:
+                    for x in range(point[0]+1, pointList[i+1][0]):
+                        self.pointList.append((x,point[1]))
             print(self.pointList)
 
 
