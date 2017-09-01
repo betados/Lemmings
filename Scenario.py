@@ -25,8 +25,8 @@ class Floor:
     def draw(self):
         pygame.draw.polygon(self.screen, self.color, self.pointList, 1)
         for point in self.pointList:
-            if point[0] % 10 == 0:
-                self.screen.blit(self.sprite.image, (point[0],point[1],1,1), (900,10,15,15))
+            if point[0] % 7 == 0:
+                self.screen.blit(self.sprite.image, (point[0]-20,point[1]-3,1,1), (248,0,30,8))
 
     def getInit(self):
         return self.start
@@ -37,7 +37,7 @@ class Floor:
 class Sprite(pygame.sprite.Sprite):
     def __init__(self):
         self.image = pygame.Surface([5, 5])
-        self.image = pygame.image.load("images/grass.png").convert()
+        self.image = pygame.image.load("images/grass.png").convert_alpha()
 
 
 

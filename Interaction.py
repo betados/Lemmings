@@ -20,7 +20,7 @@ class Interaction:
             if index == len(pointList)-1:
                 break
 
-            if self.getDistance(pos, point) <= 6:
+            if self.getDistance(pos, point) <= 4:
                 # print("colision")
                 return True, point, pointList[index+1]
 
