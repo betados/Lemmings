@@ -1,5 +1,6 @@
 import pygame, random
 
+
 class LemmingList:
 
     def __init__(self,quantity):
@@ -24,15 +25,18 @@ class Lemming:
         self.rect = pygame.Rect(self.pos, (self.ancho, self.alto))
         self.rect.bottomright = self.pos
         self.knee = 0, 0
+        self.isFalling = True
 
         self.vel = 0, 0.1
         self.accel = 0, 0
         self.sprite = Sprite()
-        self.totalImages = 7
-        self.imagePointer = random.randrange(7)
+        self.totalWalkingImages = 7
+        self.walkingImagePointer = random.randrange(7)
+        self.totalFallingImages = 3
+        self.fallingImagePointer = random.randrange(1,3)
         self.image = self.getNextImage()
         self.times = 0
-        self.period = 7
+        self.period = 10
 
 
     def draw(self,t, screen):
@@ -52,10 +56,16 @@ class Lemming:
 
     def getNextImage(self):
         side = 46
-        self.imagePointer += 1
-        if self.imagePointer >= self.totalImages:
-            self.imagePointer = 0
-        return 50*self.imagePointer+8, side*2, side, side-10
+        if self.isFalling:
+            self.fallingImagePointer += 1
+            if self.fallingImagePointer >= self.totalFallingImages:
+                self.fallingImagePointer = 1
+            return 50 * self.fallingImagePointer + 8, side * 5, side, side - 10
+        else:
+            self.walkingImagePointer += 1
+            if self.walkingImagePointer >= self.totalWalkingImages:
+                self.walkingImagePointer = 0
+            return 50 * self.walkingImagePointer + 8, side * 2, side, side - 10
 
 
 class Sprite(pygame.sprite.Sprite):

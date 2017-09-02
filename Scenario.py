@@ -7,7 +7,7 @@ class Floor:
         print(pointList)
         self.start = (50, size[1] * 0.7)
         self.end = (size[0] - 500, size[1] * 0.1)
-        self.color = 0, 0, 255
+        self.color = 0, 255, 0
         self.pointList = []
         self.sprite = Sprite()
 
@@ -23,10 +23,11 @@ class Floor:
         self.screen = screen
 
     def draw(self):
-        pygame.draw.polygon(self.screen, self.color, self.pointList, 1)
-        for point in self.pointList:
-            if point[0] % 7 == 0:
-                self.screen.blit(self.sprite.image, (point[0]-20,point[1]-3,1,1), (248,0,30,8))
+        # pygame.draw.polygon(self.screen, self.color, self.pointList, 1)
+        pygame.draw.lines(self.screen, self.color, False, self.pointList, 2)
+        # for point in self.pointList:
+        #     if point[0] % 7 == 0:
+        #         self.screen.blit(self.sprite.image, (point[0]-20,point[1]-3,1,1), (248,0,30,8))
 
     def getInit(self):
         return self.start

@@ -10,6 +10,7 @@ if sys.platform == 'win32' or sys.platform == 'win64':
 from Scenario import Scenario
 from Lemming import LemmingList
 from Interaction import Interaction
+from gui import Gui
 
 pygame.init()
 reloj = pygame.time.Clock()
@@ -21,6 +22,7 @@ resolution = (800, 600)
 pygame.display.set_caption('Lemmings')
 screen = pygame.display.set_mode(resolution)
 scenario = Scenario(screen, resolution, "maps/a.yaml")
+gui = Gui(resolution, screen)
 lemmingList = LemmingList(10)
 interaction = Interaction()
 
@@ -70,6 +72,7 @@ while not done:
     # borra lo anterior
     scenario.draw()
     interaction.caminaRect(lemmingList, scenario.floorList)
+    gui.draw()
     # interaction.check(lemmingList, scenario.getFloor())
     lemmingList.draw(t, screen)
 

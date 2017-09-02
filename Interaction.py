@@ -9,9 +9,10 @@ class Interaction:
                 # TODO tener en cuenta la inclinacion para caer o no poder avanzar
                 if collision and nextPoint[0] >= point[0]:
                     lemming.vel = (nextPoint[0] - point[0]) * 0.03, (nextPoint[1] - point[1]) * 0.03
-                    break;
+                    lemming.isFalling = False
+                    break
                 else:
-                    pass
+                    lemming.isFalling = True
                     lemming.vel = 0, 0.1
                 # print("lemming.vel:",lemming.index, lemming.vel)
 

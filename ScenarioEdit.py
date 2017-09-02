@@ -17,7 +17,7 @@ class Floor:
         # print("dibuja")
         # rect2 = pygame.draw.rect(screen,(255,255,255), (100, 20, 60, 60), 3)  # not filled
         if len(self.pointList) > 2:
-            poly1 = pygame.draw.polygon(screen, (255,255,255), self.pointList, 0)  # filled
+            pygame.draw.lines(screen, (255,255,255), False, self.pointList, 2)  # filled
 
 
     def getPoints(self):
