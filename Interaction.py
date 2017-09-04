@@ -32,3 +32,11 @@ class Interaction:
         dist = math.sqrt(math.pow(pointQ[0] - pointP[0], 2) + math.pow(pointQ[1] - pointP[1], 2))
         return dist
 
+    def isButtonPressed(self, pos, buttonList):
+        for button in buttonList:
+            if button.coordinates[1][0] > pos[0] > button.coordinates[0][0] and\
+                    button.coordinates[0][1] < pos[1] < button.coordinates[3][1]:
+                print(button.text)
+                return button.text
+        return None
+

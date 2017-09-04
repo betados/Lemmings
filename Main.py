@@ -26,6 +26,8 @@ gui = Gui(resolution, screen)
 lemmingList = LemmingList(10)
 interaction = Interaction()
 
+stateDict = {}
+stateDict["actionSelected"] = False
 done = False
 
 
@@ -45,23 +47,21 @@ while not done:
 
     # --- LA LÓGICA DEL JUEGO DEBERÍA IR AQUÍ
     teclas = pygame.key.get_pressed()
-
-    # if teclas[pygame.K_w]:
-    #     # x=x+0.2
-    #     avance = avance[0]+1, avance[1]
-    # if teclas[pygame.K_a]:
-    #     # y=y+0.2
-    #     avance = avance[0], avance[1]+1
-    # if teclas[pygame.K_s]:
-    #     # x=x-0.2
-    #     avance = avance[0]-1, avance[1]
-    # if teclas[pygame.K_d]:
-    #     # y=y-0.2
-    #     avance = avance[0], avance[1]-1
-
     # para sair
     if teclas[pygame.K_ESCAPE]:
         done=True
+
+    if not stateDict["actionSelected"]:
+        if pygame.mouse.get_pressed()[0] == 1:
+            # movimiento = pygame.mouse.get_rel()
+            position = pygame.mouse.get_pos()
+            click = interaction.isButtonPressed(position, gui.buttonList)
+            if click is not None:
+                stateDict["actionSelected"] = True
+                print(click)
+
+
+
 
     t=reloj.get_time()
     # print(t)
@@ -73,7 +73,6 @@ while not done:
     scenario.draw()
     interaction.caminaRect(lemmingList, scenario.floorList)
     gui.draw()
-    # interaction.check(lemmingList, scenario.getFloor())
     lemmingList.draw(t, screen)
 
 
@@ -82,8 +81,7 @@ while not done:
     pygame.display.flip()
 
     # --- Limitamos a 60 fotogramas por segundo (frames per second)
-    # print("iteracion")
-    reloj.tick(200)
+    reloj.tick(100)
 
 # Cerramos la ventana y salimos.
 # Si te olvidas de esta última línea, el programa se 'colgará'

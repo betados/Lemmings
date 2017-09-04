@@ -1,33 +1,51 @@
 import pygame
 
+
 class Gui:
     def __init__(self, res, screen):
         self.screen = screen
         self.res = res
-        self.characterList = ["Stop", "Stairs", "Bomb", "Dig down", "Dig horiz.","Parachute"]
+        self.characterList = ["Stop", "Stairs up", "Stairs down", "Bomb",
+                              "Dig down", "Dig horiz.","Parachute"]
         self.quantity = len(self.characterList)
-        self.heigth = res[0] / self.quantity
+        self.height = res[0] / self.quantity
 
-        self.font = pygame.font.SysFont("calibri", 30)
+        self.buttonList = []
+        for i, text in enumerate(self.characterList):
+            button = Button(self.screen, i*self.height, self.res[1]-self.height,
+                            self.height, self.height, text=text)
+            self.buttonList.append(button)
 
     def draw(self):
-        for i in range(self.quantity):
-            pygame.draw.line(self.screen,(100, 100, 100),((i+1)*self.heigth,self.res[1]),((i+1)*self.heigth,self.res[1]-self.heigth),2)
-        pygame.draw.line(self.screen,(100, 100, 100),(0,self.res[1]-self.heigth),(self.res[0],self.res[1]-self.heigth))
+        for button in self.buttonList:
+            button.draw()
         # self.images()
-        self.text()
-
-    def text(self):
-        for i,text in enumerate(self.characterList):
-            # TEXT
-            # render text
-            label = self.font.render(text, 1, (255, 255, 255))
-            self.screen.blit(label, (i*self.heigth+20,self.res[1]-self.heigth/2))
-            # self.screen.blit(label, (50,50))
 
     def images(self):
         self.image = pygame.image.load("images/lemmings.png").convert()
         for i,rect in enumerate(self.characterList):
-            self.screen.blit(self.image, ((i+1)*self.heigth,self.res[1]-self.heigth/2), rect)
+            self.screen.blit(self.image, ((i+1)*self.height,self.res[1]-self.height/2), rect)
+
+
+class Button:
+    def __init__(self, screen, x, y, width, height, text):
+        # self.rect = rect
+        self.screen = screen
+        self.x = x
+        self.y = y
+        self.height = height
+        self.width = width
+        self.coordinates = [(x, y), (x+width, y), (x+width, y+height), (x, y+height)]
+        self.text = text
+        self.font = pygame.font.SysFont("calibri", 20)
+
+    def draw(self):
+        pygame.draw.lines(self.screen, (255, 0, 255), 0, self.coordinates, 2)
+        label = self.font.render(self.text, 1, (255, 220, 255))
+        self.screen.blit(label, (self.x+10, self.y+self.height/2))
+
+
+
+
 
 
