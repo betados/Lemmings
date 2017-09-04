@@ -3,11 +3,13 @@ import pygame
 
 class Floor:
 
-    def __init__(self, screen, size, pointList):
-        print(pointList)
+    def __init__(self, screen, size, pointList, discreteDebugging):
         self.start = (50, size[1] * 0.7)
         self.end = (size[0] - 500, size[1] * 0.1)
-        self.color = 0, 255, 0
+        if discreteDebugging:
+            self.color = 0, 0, 50
+        else:
+            self.color = 0, 0, 255
         self.pointList = []
         self.sprite = Sprite()
 
@@ -18,13 +20,12 @@ class Floor:
                 if (pointList[i+1][0] - point[0]) > 1:
                     for x in range(point[0]+1, pointList[i+1][0]):
                         self.pointList.append((x, point[1]))
-        print(self.pointList)
 
         self.screen = screen
 
     def draw(self):
         # pygame.draw.polygon(self.screen, self.color, self.pointList, 1)
-        pygame.draw.lines(self.screen, self.color, False, self.pointList, 2)
+        pygame.draw.lines(self.screen, self.color, False, self.pointList, 1)
         # for point in self.pointList:
         #     if point[0] % 7 == 0:
         #         self.screen.blit(self.sprite.image, (point[0]-20,point[1]-3,1,1), (248,0,30,8))
@@ -44,7 +45,7 @@ class Sprite(pygame.sprite.Sprite):
 
 class Scenario:
 
-    def __init__(self, screen, res, font=None):
+    def __init__(self, screen, res, font=None, discreteDebugging = False):
         self.size = res
         self.floorList = []
         self.screen = screen
@@ -65,7 +66,7 @@ class Scenario:
                 if i == len(load)-1:
                     break
                 if element == "floor" and load[i+1] != "floor" and len(load[i+1])>2:
-                    self.floorList.append(Floor(screen, res, load[i+1]))
+                    self.floorList.append(Floor(screen, res, load[i+1], discreteDebugging))
 
     def draw(self):
         for floor in self.floorList:

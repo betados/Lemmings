@@ -18,16 +18,20 @@ reloj = pygame.time.Clock()
 
 resolution = (800, 600)
 
+discreteDebugging = True
+
+characterList = ["Stop", "Stairs up", "Stairs down", "Bomb",
+                "Dig down", "Dig horiz.", "Parachute"]
 
 pygame.display.set_caption('Lemmings')
 screen = pygame.display.set_mode(resolution)
-scenario = Scenario(screen, resolution, "maps/a.yaml")
-gui = Gui(resolution, screen)
-lemmingList = LemmingList(10)
+scenario = Scenario(screen, resolution, "maps/a.yaml", discreteDebugging)
+gui = Gui(resolution, screen, characterList, discreteDebugging)
+lemmingList = LemmingList(10, discreteDebugging)
 interaction = Interaction()
 
 stateDict = {}
-stateDict["actionSelected"] = False
+stateDict["isActionSelected"] = False
 done = False
 
 
@@ -50,15 +54,22 @@ while not done:
     # para sair
     if teclas[pygame.K_ESCAPE]:
         done=True
+    if teclas[pygame.K_q]:
+        stateDict["isActionSelected"] = False
 
-    if not stateDict["actionSelected"]:
-        if pygame.mouse.get_pressed()[0] == 1:
-            # movimiento = pygame.mouse.get_rel()
-            position = pygame.mouse.get_pos()
+
+    if pygame.mouse.get_pressed()[0] == 1:
+        position = pygame.mouse.get_pos()
+        if not stateDict["isActionSelected"]:
             click = interaction.isButtonPressed(position, gui.buttonList)
             if click is not None:
-                stateDict["actionSelected"] = True
-                print(click)
+                stateDict["isActionSelected"] = True
+                stateDict["action"] = click
+        else:
+            click = interaction.isLemmingPressed(position, lemmingList.lista, stateDict)
+            if click is not None:
+                stateDict["isActionSelected"] = False
+                # stateDict["actionSelected"] = click
 
 
 

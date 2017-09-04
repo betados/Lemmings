@@ -40,3 +40,10 @@ class Interaction:
                 return button.text
         return None
 
+    def isLemmingPressed(self, pos, lemmingList, stateDict):
+        for lemming in lemmingList:
+            if lemming.rect.collidepoint(pos):
+                print(lemming.index)
+                lemming.action = stateDict["action"]
+                return lemming.index
+        return None
