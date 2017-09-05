@@ -1,9 +1,16 @@
-import pygame, random
+"""
+The lemming sprite module.
+
+"""
+
+import random
+import pygame
 
 
-class LemmingList:
+class LemmingList(object):
+    """ This class contains and handles the list of lemmings"""
 
-    def __init__(self,quantity, discreteDebugging=False):
+    def __init__(self, quantity, discreteDebugging=False):
         self.lista = []
         self.discreteDebugging = discreteDebugging
 
@@ -12,14 +19,14 @@ class LemmingList:
             self.lista.append(lemming)
 
     def draw(self, t, screen):
+        """ Atualize position and draw each lemming"""
         for lemming in self.lista:
             lemming.actualize(t)
             lemming.draw(screen, self.discreteDebugging)
 
-    def getList(self):
-        return self.lista
 
-class Lemming:
+class Lemming(object):
+    """ This class is the implementation of the lemmings sprites"""
     def __init__(self, index):
         self.index = index
         self.pos = 30, (index-10)*100
@@ -29,7 +36,7 @@ class Lemming:
         self.rect.bottomright = self.pos
         self.knee = 0, 0
         self.isFalling = True
-        self.action = None
+        self.action = "Walk"
 
         self.vel = 0, 0.1
         self.accel = 0, 0
@@ -42,16 +49,25 @@ class Lemming:
         self.times = 0
         self.period = 10
 
-    def actualize(self,t):
-        if self.action == "Stop":
-            self.vel = 0, 0
-        else:
-            self.vel = self.vel[0] + 0.5 * self.accel[0] * t*t, self.vel[1] + 0.5 * self.accel[1] * t*t
-        self.pos = self.pos[0] + self.vel[0]*t,  self.pos[1] + self.vel[1]*t
+        self.characterDict = {"Walk": self.walk, "Stop": self.stop,
+                              "CLimb": self.climb, "Stairway": self.stairway,
+                              "Bomb": self.bomb, "Dig down": self.dig,
+                              "Dig horiz.": self.dig, "Dig diag.": self.dig,
+                              "Parachute": self.parachute}
+
+    def actualize(self, t):
+        """Actualize the position and speed of the lemming"""
+        if self.action is not None:
+            self.characterDict[self.action](t)
+
+        print(self.index, self.action, self.vel)
+
+        self.pos = self.pos[0] + self.vel[0]*t, self.pos[1] + self.vel[1]*t
         self.rect.bottomright = self.pos
         self.knee = self.pos[0] - self.ancho/2, self.pos[1] - self.ancho/2 + 3
 
     def draw(self, screen, discreteDebugging):
+        """Draw the lemming"""
         if discreteDebugging:
             pygame.draw.rect(screen, (0, 50, 0), self.rect, 1)
         else:
@@ -61,9 +77,8 @@ class Lemming:
                 self.times = 0
             screen.blit(self.sprite.image, self.rect, self.image)
 
-
-
     def getNextImage(self):
+        """Return the corresponding image for the sprite"""
         side = 46
         if self.isFalling:
             self.fallingImagePointer += 1
@@ -76,8 +91,44 @@ class Lemming:
                 self.walkingImagePointer = 0
             return 50 * self.walkingImagePointer + 8, side * 2, side, side - 10
 
+    def isWalking(self):
+        """Is the lemming walking?"""
+        return bool(self.action == "Walk")
+
+    # ACTIONS for switch-case statement
+    def walk(self, t):
+        """ case """
+        self.vel = self.vel[0] + 0.5 * self.accel[0] * t * t,\
+            self.vel[1] + 0.5 * self.accel[1] * t * t
+
+    def stop(self, t):
+        """ case """
+        self.vel = 0, 0
+
+    def bomb(self, t):
+        """ case """
+        pass
+
+    def climb(self, t):
+        """ case """
+        pass
+
+    def stairway(self, t):
+        """ case """
+        pass
+
+    def dig(self, t):
+        """ case """
+        # dig down
+        self.vel = 0, 0.01
+
+    def parachute(self, t):
+        """ case """
+        pass
+
 
 class Sprite(pygame.sprite.Sprite):
+    # FIXME esta clase sobra, pero si la quito da un error que ahora mismo no se arreglar.
     def __init__(self):
         self.image = pygame.Surface([5, 5])
         self.image = pygame.image.load("images/lemmings.png").convert()

@@ -1,8 +1,12 @@
+"""
+    Module in charge of generating the map
+"""
 import pygame
+import yaml
 
 
-class Floor:
-
+class Floor(object):
+    """ A floor object is each of the separated point lists"""
     def __init__(self, screen, size, pointList, discreteDebugging):
         self.start = (50, size[1] * 0.7)
         self.end = (size[0] - 500, size[1] * 0.1)
@@ -24,17 +28,18 @@ class Floor:
         self.screen = screen
 
     def draw(self):
-        # pygame.draw.polygon(self.screen, self.color, self.pointList, 1)
+        """ draw the floor """
         pygame.draw.lines(self.screen, self.color, False, self.pointList, 1)
         # for point in self.pointList:
         #     if point[0] % 7 == 0:
         #         self.screen.blit(self.sprite.image, (point[0]-20,point[1]-3,1,1), (248,0,30,8))
 
-    def getInit(self):
-        return self.start
+    # def  getInit(self):
+    #     return self.start
+    #
+    # def getEnd(self):
+    #     return self.end
 
-    def getEnd(self):
-        return self.end
 
 class Sprite(pygame.sprite.Sprite):
     def __init__(self):
@@ -42,32 +47,22 @@ class Sprite(pygame.sprite.Sprite):
         self.image = pygame.image.load("images/grass.png").convert_alpha()
 
 
-
-class Scenario:
-
-    def __init__(self, screen, res, font=None, discreteDebugging = False):
+class Scenario(object):
+    """ It contains and handles the list of floors"""
+    def __init__(self, screen, res, font=None, discreteDebugging=False):
         self.size = res
         self.floorList = []
         self.screen = screen
 
-        if font is None:
-            pointList = []
-            a = (self.end[1]-self.start[1])/(self.end[0]-self.start[0])
-            for x in range(self.start[0], self.end[0]):
-                y = a*(x-self.start[0])+self.start[1]
-                pointList.append([x, y])
-            self.floorList.append(Floor(screen,res, pointList))
-        else:
-            import yaml
-
-            load = yaml.load(open(font))
-            for i, element in enumerate(load):
-                # print(element)
-                if i == len(load)-1:
-                    break
-                if element == "floor" and load[i+1] != "floor" and len(load[i+1])>2:
-                    self.floorList.append(Floor(screen, res, load[i+1], discreteDebugging))
+        load = yaml.load(open(font))
+        for i, element in enumerate(load):
+            # print(element)
+            if i == len(load)-1:
+                break
+            if element == "floor" and load[i+1] != "floor" and len(load[i+1]) > 2:
+                self.floorList.append(Floor(screen, res, load[i+1], discreteDebugging))
 
     def draw(self):
+        """ draws each floor """
         for floor in self.floorList:
             floor.draw()

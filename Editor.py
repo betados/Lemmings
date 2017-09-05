@@ -1,13 +1,16 @@
-import os, sys, math, random, eztext
+# -*- coding: utf-8 -*-
+
+import os
+import sys
+import eztext
 import pygame
-from pygame.locals import *
+from ScenarioEdit import Scenario
+
 if sys.platform == 'win32' or sys.platform == 'win64':
     os.environ['SDL_VIDEO_CENTERED'] = '1'
-from ScenarioEdit import Scenario
 
 pygame.init()
 reloj = pygame.time.Clock()
-
 
 resolution = (800, 600)
 scenario = Scenario(resolution)
@@ -33,16 +36,13 @@ while not done:
     if state == "drawing":
         # --- Bucle principal de eventos
 
-
         for event in events:
             if event.type == pygame.QUIT:
                 done = True
             if event.type == pygame.MOUSEBUTTONDOWN:
-               scenario.newFloor()
+                scenario.newFloor()
             if event.type == pygame.MOUSEBUTTONUP:
                 pass
-               # scenario.addFloor()
-
 
         if pygame.mouse.get_pressed()[0] == 1:
             movimiento = pygame.mouse.get_rel()
@@ -55,12 +55,10 @@ while not done:
 
         # --- LA LÓGICA DEL JUEGO DEBERÍA IR AQUÍ
 
-
-
         #     # y=y+0.2
         #     avance = avance[0], avance[1]+1
 
-        #SAVE
+        # SAVE
         if teclas[pygame.K_s]:
             events = 0
             state = "saving"
@@ -77,13 +75,12 @@ while not done:
 
         # to exit
         if teclas[pygame.K_ESCAPE]:
-            done=True
-
+            done = True
 
     scenario.draw(screen)
 
     if state == "saving" and events != 0:
-        if teclas[pygame.K_RETURN] or teclas[K_KP_ENTER]:
+        if teclas[pygame.K_RETURN] or teclas[pygame.K_KP_ENTER]:
             scenario.save(text.getInput())
             state = "drawing"
         text.update(events)
@@ -96,19 +93,12 @@ while not done:
         label = myfont.render("To save press enter", 1, (0, 100, 255))
         screen.blit(label, (resolution[0] / 50, resolution[1] - size))
 
-
-
     # t=reloj.get_time()
     # print(t)
-
 
     # --- EL CÓDIGO DE DIBUJO DEBERÍA IR AQUÍ
 
     # # borra lo anterior
-
-
-
-
 
     # --- Avanzamos y actualizamos la pantalla con lo que hemos dibujado.
 

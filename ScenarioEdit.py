@@ -1,9 +1,10 @@
 
-import math, random
-import pygame, eztext
+import math
+import random
+import pygame
 
 
-class Floor:
+class Floor(object):
 
     def __init__(self):
         self.pointList = []
@@ -19,7 +20,6 @@ class Floor:
         if len(self.pointList) > 2:
             pygame.draw.lines(screen, (255,255,255), False, self.pointList, 2)  # filled
 
-
     def getPoints(self):
         return self.pointList
 
@@ -30,7 +30,8 @@ class Floor:
     def add(self, point):
         self.pointList.append(point)
 
-class Scenario:
+
+class Scenario(object):
 
     def __init__(self, res):
         self.res = res
