@@ -57,3 +57,5 @@ class Interaction(object):
                 lemming.action = stateDict["action"]
                 return lemming.index
         return None
+
+    # TODO comprabación lemming-lemming y sus complementos

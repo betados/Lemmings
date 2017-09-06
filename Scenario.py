@@ -66,3 +66,4 @@ class Scenario(object):
         """ draws each floor """
         for floor in self.floorList:
             floor.draw()
+

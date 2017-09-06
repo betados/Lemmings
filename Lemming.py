@@ -10,12 +10,12 @@ import pygame
 class LemmingList(object):
     """ This class contains and handles the list of lemmings"""
 
-    def __init__(self, quantity, discreteDebugging=False):
+    def __init__(self, quantity, screen, discreteDebugging=False):
         self.lista = []
         self.discreteDebugging = discreteDebugging
 
         for i in range(quantity):
-            lemming = Lemming(i)
+            lemming = Lemming(i, screen)
             self.lista.append(lemming)
 
     def draw(self, t, screen):
@@ -24,10 +24,15 @@ class LemmingList(object):
             lemming.actualize(t)
             lemming.draw(screen, self.discreteDebugging)
 
+    def get(self, index):
+        """ get the lemming """
+        return self.lista[index]
+
 
 class Lemming(object):
     """ This class is the implementation of the lemmings sprites"""
-    def __init__(self, index):
+    def __init__(self, index, screen):
+        self.screen = screen
         self.index = index
         self.pos = 30, (index-10)*100
         self.alto = 36
@@ -48,6 +53,8 @@ class Lemming(object):
         self.image = self.getNextImage()
         self.times = 0
         self.period = 10
+
+        self.complements = []
 
         self.characterDict = {"Walk": self.walk, "Stop": self.stop,
                               "CLimb": self.climb, "Stairway": self.stairway,
@@ -76,6 +83,10 @@ class Lemming(object):
                 self.image = self.getNextImage()
                 self.times = 0
             screen.blit(self.sprite.image, self.rect, self.image)
+
+        for complement in self.complements:
+            complement.draw()
+
 
     def getNextImage(self):
         """Return the corresponding image for the sprite"""
@@ -115,7 +126,9 @@ class Lemming(object):
 
     def stairway(self, t):
         """ case """
-        pass
+        for i in range(15):
+            self.complements.append(Step((self.pos[0]+i*7, self.pos[1]-i*5), self.screen))
+        self.action = "Walk"
 
     def dig(self, t):
         """ case """
@@ -132,3 +145,33 @@ class Sprite(pygame.sprite.Sprite):
     def __init__(self):
         self.image = pygame.Surface([5, 5])
         self.image = pygame.image.load("images/lemmings.png").convert()
+
+
+class Step(object):
+    """ The stair step object that"""
+    width = 10
+    height = 3
+
+    def __init__(self, pos, screen):
+        # down left corner
+        self.pos = pos
+        self.screen = screen
+        self.pointList = []
+        pointer = self.pos
+        for _ in range(Step.width):
+            pointer = pointer[0]+1, pointer[1]
+            self.pointList.append(pointer)
+        for _ in range(Step.height):
+            pointer = pointer[0], pointer[1]-1
+            self.pointList.append(pointer)
+        for _ in range(Step.width):
+            pointer = pointer[0]-1, pointer[1]
+            self.pointList.append(pointer)
+        for _ in range(Step.height):
+            pointer = pointer[0], pointer[1]+1
+            self.pointList.append(pointer)
+
+    def draw(self):
+        """ Draws it"""
+        pygame.draw.lines(self.screen, (150, 150, 150), False, self.pointList, 1)
+

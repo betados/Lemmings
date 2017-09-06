@@ -28,7 +28,7 @@ pygame.display.set_caption('Lemmings')
 screen = pygame.display.set_mode(resolution)
 scenario = Scenario(screen, resolution, "maps/a.yaml", discreteDebugging)
 gui = Gui(resolution, screen, characterList, discreteDebugging)
-lemmingList = LemmingList(10, discreteDebugging)
+lemmingList = LemmingList(10, screen, discreteDebugging)
 
 stateDict = dict()
 stateDict["isActionSelected"] = False
