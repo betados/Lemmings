@@ -42,6 +42,8 @@ class Lemming(object):
         self.knee = 0, 0
         self.isFalling = True
         self.action = "Walk"
+        self.stairCount = 0
+        self.stairPos = None
 
         self.vel = 0, 0.1
         self.accel = 0, 0
@@ -67,7 +69,7 @@ class Lemming(object):
         if self.action is not None:
             self.characterDict[self.action](t)
 
-        print(self.index, self.action, self.vel)
+        # print(self.index, self.action, self.vel)
 
         self.pos = self.pos[0] + self.vel[0]*t, self.pos[1] + self.vel[1]*t
         self.rect.bottomright = self.pos
@@ -126,9 +128,21 @@ class Lemming(object):
 
     def stairway(self, t):
         """ case """
-        for i in range(15):
-            self.complements.append(Step((self.pos[0]+i*7, self.pos[1]-i*5), self.screen))
-        self.action = "Walk"
+        # for i in range(15):
+        #     self.complements.append(Step((self.pos[0]+i*7, self.pos[1]-i*5), self.screen))
+        self.vel = 0, 0
+        if self.stairCount % 1 == 0:
+            if self.stairPos is None:
+                self.stairPos = self.pos
+            else:
+                self.stairPos = self.stairPos[0] + 7, self.stairPos[1] - 5
+                self.pos = self.stairPos
+            self.complements.append(Step(self.stairPos, self.screen))
+        self.stairCount += 0.125
+        if self.stairCount >= 15:
+            self.stairCount = 0
+            self.stairPos = None
+            self.action = "Walk"
 
     def dig(self, t):
         """ case """
