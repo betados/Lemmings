@@ -11,7 +11,11 @@ class Floor(object):
     def __init__(self, screen, size, pointList, discreteDebugging):
         # self.start = (50, size[1] * 0.7)
         # self.end = (size[0] - 500, size[1] * 0.1)
+        self.screen = screen
         self.size = size
+        self.relleno = []
+        self.rellenoLines = []
+        self.pointListAdded = []
         if discreteDebugging:
             self.color = 0, 0, 150
         else:
@@ -24,6 +28,13 @@ class Floor(object):
         for i, point in enumerate(pointList):
             self.pointList.append(point)
             if i < len(pointList)-1:
+                # while Interaction.getDistance(self.pointList[len(self.pointList)-1],
+                #                               pointList[i+1]) > 2:
+                #     unitVector = Interaction.getUnitVector(self.pointList[len(self.pointList)-1], pointList[i+i])
+                #     next = Interaction.add(self.pointList[len(self.pointList)-1], unitVector)
+                #     print(next, unitVector)
+                #     self.pointList.append((int(next[0]), int(next[1])))
+                #     self.draw()
                 if (pointList[i+1][0] - point[0]) > 1:
                     for x in range(point[0]+1, pointList[i+1][0]):
                         self.pointList.append((x, point[1]))
@@ -31,21 +42,20 @@ class Floor(object):
                     for x in range(pointList[i+1][0], point[0]+1):
                         self.pointList.append((x, point[1]))
 
-        self.pointListAdded = []
+
         if Interaction.getDistance(self.pointList[len(self.pointList)-1], self.pointList[0]) < 50:
             print("cierra el circulo")
             self.complete(self.pointList[0], self.pointList[len(self.pointList)-1], self.pointList, 0)
         else:
             # Completa verticalmente desde el final hasta el suelo
             s = size[0], size[1]-50
-            self.complete(self.pointList[len(self.pointList)-1], s, self.pointList, axis=1)
+            self.complete(self.pointList[len(self.pointList)-1], size, self.pointList, axis=1)
             # Completa horizontalmente desde el final hasta el inicio por el suelo
             self.complete(self.pointList[len(self.pointList)-1], self.pointList[0], self.pointList, axis=0)
             # Completa verticalmente desde el final hasta el inicio
             self.complete(self.pointList[len(self.pointList) - 1], self.pointList[0], self.pointList, axis=1)
 
-        self.relleno = []
-        self.rellenoLines = []
+
         # RELLENO
         if True:
             # pointRange = [[minX, maxX], [minY, maxY]]
@@ -96,7 +106,7 @@ class Floor(object):
         #             pass
                     # print ("relleno: " , x,y)
 
-        self.screen = screen
+
 
     def complete(self, point1, point2, pointList, axis=0):
         if point2[axis] < point1[axis]:

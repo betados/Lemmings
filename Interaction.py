@@ -36,6 +36,7 @@ class Interaction(object):
     def getDistance(pointP, pointQ):
         """ returns the distance between two bidimensional points"""
         dist = math.sqrt(math.pow(pointQ[0] - pointP[0], 2) + math.pow(pointQ[1] - pointP[1], 2))
+        # print(dist)
         return dist
 
     @staticmethod
@@ -57,5 +58,17 @@ class Interaction(object):
                 lemming.action = stateDict["action"]
                 return lemming.index
         return None
+
+    @staticmethod
+    def getUnitVector(point1, point2):
+        catH = point2[0] - point1[0]
+        catV = point2[1] - point1[1]
+        modulo = math.sqrt(math.pow(catH, 2) + math.pow(catV, 2))
+        if modulo == 0: return 9999,9999
+        return catH/modulo, catV/modulo
+
+    @staticmethod
+    def add(point1, point2):
+        return point2[0] + point1[0], point2[1] + point1[1]
 
     # TODO comprabación lemming-lemming y sus complementos
