@@ -20,6 +20,7 @@ class Floor(object):
         self.sprite = Sprite()
 
         # Rellena si faltan puntos entremedias
+        # FIXME rellena en horizontal cuando deberia rellenar con una linea desde un punto hasta otro
         for i, point in enumerate(pointList):
             self.pointList.append(point)
             if i < len(pointList)-1:
@@ -27,55 +28,52 @@ class Floor(object):
                     for x in range(point[0]+1, pointList[i+1][0]):
                         self.pointList.append((x, point[1]))
                 if (point[0] - pointList[i+1][0]) > 1:
-                    for x in range(pointList[i+1][0], point[0]+1 ):
+                    for x in range(pointList[i+1][0], point[0]+1):
                         self.pointList.append((x, point[1]))
 
-        if Interaction.getDistance(self.pointList[len(self.pointList)-1], self.pointList[0]) < 10:
-            # FIXME para circulos antihorarios no funciona bien
-            for i in range(self.pointList[len(self.pointList)-1][0], self.pointList[0][0]):
-                self.pointList.append((self.pointList[len(self.pointList)-1][0]+i,
-                                       self.pointList[len(self.pointList)-1][1]))
+        self.pointListAdded = []
+        if Interaction.getDistance(self.pointList[len(self.pointList)-1], self.pointList[0]) < 50:
+            print("cierra el circulo")
+            self.complete(self.pointList[0], self.pointList[len(self.pointList)-1], self.pointList, 0)
         else:
-            # Rellena verticalmente desde el final hasta el suelo
-            for _ in range(size[1] - self.pointList[len(self.pointList)-1][1] - 10):
-                self.pointList.append((self.pointList[len(self.pointList) - 1][0],
-                                       self.pointList[len(self.pointList) - 1][1] + 1))
-
-
-            # Rellena horizontalmente desde el final hasta el inicio por el suelo
-            for _ in range(self.pointList[len(pointList)-1][0] - self.pointList[0][0]):
-                self.pointList.append((self.pointList[len(self.pointList) - 1][0] - 1,
-                                       self.pointList[len(self.pointList) - 1][1]))
-
-            # Rellena verticalmente desde el final hasta el inicio
-            for _ in range(self.pointList[len(self.pointList) - 1][1] - self.pointList[0][1]):
-                self.pointList.append((self.pointList[0][0],
-                                       self.pointList[len(self.pointList) - 1][1] - 1))
-
-        # RELLENO
-        # pointRange = [[minX, maxX], [minY, maxY]]
-        pointRange = [[9999, 0], [9999, 0]]
-        for point in self.pointList:
-            for i in range(2):
-                if point[i] < pointRange[i][0]:
-                    pointRange[i][0] = point[i]
-                if point[i] > pointRange[i][1]:
-                    pointRange[i][1] = point[i]
-        # print("range: ", pointRange)
+            # Completa verticalmente desde el final hasta el suelo
+            s = size[0], size[1]-50
+            self.complete(self.pointList[len(self.pointList)-1], s, self.pointList, axis=1)
+            # Completa horizontalmente desde el final hasta el inicio por el suelo
+            self.complete(self.pointList[len(self.pointList)-1], self.pointList[0], self.pointList, axis=0)
+            # Completa verticalmente desde el final hasta el inicio
+            self.complete(self.pointList[len(self.pointList) - 1], self.pointList[0], self.pointList, axis=1)
 
         self.relleno = []
+        self.rellenoLines = []
+        # RELLENO
         if True:
+            # pointRange = [[minX, maxX], [minY, maxY]]
+            pointRange = [[9999, 0], [9999, 0]]
+            for point in self.pointList:
+                for i in range(2):
+                    if point[i] < pointRange[i][0]:
+                        pointRange[i][0] = point[i]
+                    if point[i] > pointRange[i][1]:
+                        pointRange[i][1] = point[i]
+            # print("range: ", pointRange)
+
             for x in range(pointRange[0][0]-10, pointRange[0][1]+10):
                 trigered = False
                 yAnt = 0
+                init = None
+                end = None
                 for y in range(pointRange[1][0]-10, pointRange[1][1]+10):
                     if (x, y) in self.pointList:
                         if trigered and y-yAnt > 5:
                             yAnt= y
                             trigered = False
+                            end = (x, y)
                         if not trigered and y - yAnt > 5:
                             yAnt = y
                             trigered = True
+                            init = (x, y)
+                            continue
                         # if trigered:
                         #     yAnt= y
                         #     trigered = False
@@ -83,7 +81,10 @@ class Floor(object):
                         #     yAnt = y
                         #     trigered = True
                     if trigered:
-                        self.relleno.append((x, y))
+                        # self.relleno.append((x, y))
+                        pass
+                if init is not None and end is not None:
+                    self.rellenoLines.append((init, end))
 
 
 
@@ -97,14 +98,28 @@ class Floor(object):
 
         self.screen = screen
 
+    def complete(self, point1, point2, pointList, axis=0):
+        if point2[axis] < point1[axis]:
+            interval = -1
+        else:
+            interval = 1
+        for i in range(point1[axis], point2[axis], interval):
+            if axis == 0:
+                pointList.append((i, point1[1]))
+            if axis == 1:
+                pointList.append((point1[0], i))
+
     def draw(self):
         """ draw the floor """
-        # pygame.draw.lines(self.screen, self.color, False, self.pointList, 1)
+        #
         for point in self.pointList:
-            pygame.draw.circle(self.screen, self.color, point, 0, 0)
+            pygame.draw.circle(self.screen, self.color, point, 1, 1)
+        for point in self.pointListAdded:
+            pygame.draw.circle(self.screen, (100, 0, 0), point, 4, 4)
         for point in self.relleno:
-            pygame.draw.circle(self.screen, (100, 100, 10), point,0,0)
-
+            pygame.draw.circle(self.screen, (100, 100, 10), point, 1, 1)
+        for line in self.rellenoLines:
+            pygame.draw.lines(self.screen, (100, 100, 10), False, (line[0], line[1]), 1)
 
 
 

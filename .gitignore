@@ -1,9 +1,9 @@
 *pyc
-*xml
 .idea/
 __pycache__/
 example.py
 basura/
 *yaml
+*xml
 *yml
 *prueba*
