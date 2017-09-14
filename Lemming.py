@@ -6,6 +6,8 @@ The lemming sprite module.
 import random
 import pygame
 
+from Interaction import Interaction
+
 
 class LemmingList(object):
     """ This class contains and handles the list of lemmings"""
@@ -44,6 +46,7 @@ class Lemming(object):
         self.action = "Walk"
         self.stairCount = 0
         self.stairPos = None
+        self.floor = None
 
         self.vel = 0, 0.1
         self.accel = 0, 0
@@ -88,7 +91,6 @@ class Lemming(object):
 
         for complement in self.complements:
             complement.draw()
-
 
     def getNextImage(self):
         """Return the corresponding image for the sprite"""
@@ -148,6 +150,21 @@ class Lemming(object):
         """ case """
         # dig down
         self.vel = 0, 0.01
+
+        for point in self.floor.pointList:
+            if Interaction.getDistance(self.knee, point) < self.ancho / 2:
+                self.floor.pointList.remove(point)
+
+        # FIXME si la parte de abajo del floor está inclinada se cae por el huequillo primero sin terminar de cabar
+        for line in self.floor.rellenoLines:
+            if Interaction.getDistance(self.knee, line[0]) < self.ancho / 2:
+                if line[0][1] >= line[1][1]:
+                    self.floor.rellenoLines.remove(line)
+                    # self.isFalling = True
+                    self.action = "Walk"
+                    # self.vel = 0, 0.1
+                    continue
+                line[0][1] = self.pos[1]
 
     def parachute(self, t):
         """ case """

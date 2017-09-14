@@ -58,6 +58,7 @@ class Floor(object):
 
         # RELLENO
         if True:
+            # Cuadrado donde buscar para rellenar
             # pointRange = [[minX, maxX], [minY, maxY]]
             pointRange = [[9999, 0], [9999, 0]]
             for point in self.pointList:
@@ -78,11 +79,11 @@ class Floor(object):
                         if trigered and y-yAnt > 5:
                             yAnt= y
                             trigered = False
-                            end = (x, y)
+                            end = [x, y]
                         if not trigered and y - yAnt > 5:
                             yAnt = y
                             trigered = True
-                            init = (x, y)
+                            init = [x, y]
                             continue
                         # if trigered:
                         #     yAnt= y
@@ -94,19 +95,13 @@ class Floor(object):
                         # self.relleno.append((x, y))
                         pass
                 if init is not None and end is not None:
-                    self.rellenoLines.append((init, end))
-
-
-
-
+                    self.rellenoLines.append([init, end])
 
         # for y in range(self.size[1]):
         #     for x in range(self.size[0]):
         #         if (x, y) in self.pointList:
         #             pass
                     # print ("relleno: " , x,y)
-
-
 
     def complete(self, point1, point2, pointList, axis=0):
         if point2[axis] < point1[axis]:
@@ -130,8 +125,6 @@ class Floor(object):
             pygame.draw.circle(self.screen, (100, 100, 10), point, 1, 1)
         for line in self.rellenoLines:
             pygame.draw.lines(self.screen, (100, 100, 10), False, (line[0], line[1]), 1)
-
-
 
         # for point in self.pointList:
         #     if point[0] % 7 == 0:

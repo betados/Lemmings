@@ -14,10 +14,14 @@ class Interaction(object):
                     if collision and nextPoint[0] >= point[0]:
                         lemming.vel = (nextPoint[0] - point[0]) * 0.03, (nextPoint[1] - point[1]) * 0.03
                         lemming.isFalling = False
+                        lemming.floor = floor
                         break
                     else:
                         lemming.isFalling = True
                         lemming.vel = 0, 0.1
+            if lemming.action == "Dig down":
+                pass
+
 
     @staticmethod
     def collideList(pos, pointList):
