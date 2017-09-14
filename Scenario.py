@@ -48,7 +48,7 @@ class Floor(object):
             self.complete(self.pointList[0], self.pointList[len(self.pointList)-1], self.pointList, 0)
         else:
             # Completa verticalmente desde el final hasta el suelo
-            s = size[0], size[1]-50
+            # s = size[0], size[1]-50
             self.complete(self.pointList[len(self.pointList)-1], size, self.pointList, axis=1)
             # Completa horizontalmente desde el final hasta el inicio por el suelo
             self.complete(self.pointList[len(self.pointList)-1], self.pointList[0], self.pointList, axis=0)
@@ -77,7 +77,7 @@ class Floor(object):
                 for y in range(pointRange[1][0]-10, pointRange[1][1]+10):
                     if (x, y) in self.pointList:
                         if trigered and y-yAnt > 5:
-                            yAnt= y
+                            yAnt = y
                             trigered = False
                             end = [x, y]
                         if not trigered and y - yAnt > 5:
@@ -103,7 +103,8 @@ class Floor(object):
         #             pass
                     # print ("relleno: " , x,y)
 
-    def complete(self, point1, point2, pointList, axis=0):
+    @staticmethod
+    def complete(point1, point2, pointList, axis=0):
         if point2[axis] < point1[axis]:
             interval = -1
         else:
@@ -118,7 +119,7 @@ class Floor(object):
         """ draw the floor """
         #
         for point in self.pointList:
-            pygame.draw.circle(self.screen, self.color, point, 1, 1)
+            pygame.draw.circle(self.screen, self.color, point, 2, 2)
         for point in self.pointListAdded:
             pygame.draw.circle(self.screen, (100, 0, 0), point, 4, 4)
         for point in self.relleno:

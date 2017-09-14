@@ -58,6 +58,7 @@ class Lemming(object):
         self.image = self.getNextImage()
         self.times = 0
         self.period = 10
+        self.timer = 0
 
         self.complements = []
 
@@ -122,7 +123,23 @@ class Lemming(object):
 
     def bomb(self, t):
         """ case """
-        pass
+        radio = self.ancho * 1.3
+        self.vel = 0, 0
+        self.timer += t
+        if self.timer >= 3:
+            for line in self.floor.rellenoLines:
+                if abs(line[0][0] - self.knee[0]) < radio:
+                    # self.floor.rellenoLines.remove(line)
+                    y1, y2 = Interaction.getBoomY(radio, self.knee, line[0][0])
+                    line[0] = line[0][0], y1
+            for point in self.floor.pointList:
+                if abs(point[0] - self.knee[0]) < radio:
+                    self.floor.pointList.remove(point)
+            # self.action = "Walk"
+
+
+
+
 
     def climb(self, t):
         """ case """
@@ -130,8 +147,6 @@ class Lemming(object):
 
     def stairway(self, t):
         """ case """
-        # for i in range(15):
-        #     self.complements.append(Step((self.pos[0]+i*7, self.pos[1]-i*5), self.screen))
         self.vel = 0, 0
         if self.stairCount % 1 == 0:
             if self.stairPos is None:
@@ -144,7 +159,6 @@ class Lemming(object):
         if self.stairCount >= 15:
             self.stairCount = 0
             self.stairPos = None
-            self.action = "Walk"
 
     def dig(self, t):
         """ case """
@@ -155,16 +169,21 @@ class Lemming(object):
             if Interaction.getDistance(self.knee, point) < self.ancho / 2:
                 self.floor.pointList.remove(point)
 
-        # FIXME si la parte de abajo del floor está inclinada se cae por el huequillo primero sin terminar de cabar
+        areLines = False
         for line in self.floor.rellenoLines:
             if Interaction.getDistance(self.knee, line[0]) < self.ancho / 2:
+                # si la linea se acaba se quita de la lista
                 if line[0][1] >= line[1][1]:
                     self.floor.rellenoLines.remove(line)
-                    # self.isFalling = True
-                    self.action = "Walk"
-                    # self.vel = 0, 0.1
                     continue
-                line[0][1] = self.pos[1]
+                line[0][1] += 1
+                self.floor.pointList.append(line[0])
+                areLines = True
+
+        if not areLines:
+            self.action = "Walk"
+
+
 
     def parachute(self, t):
         """ case """

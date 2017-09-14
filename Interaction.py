@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+""" Check the interaction between the elements in the game """
+
 import math
 
 
@@ -9,10 +13,13 @@ class Interaction(object):
         for lemming in lemmingList.lista:
             if lemming.action == "Walk":
                 for floor in floorList:
-                    collision, point, nextPoint = Interaction.collideList(lemming.knee, floor.pointList)
+                    collision, point, nextPoint = \
+                        Interaction.collideList(lemming.knee, floor.pointList)
                     # TODO tener en cuenta la inclinacion para caer o no poder avanzar
-                    if collision and nextPoint[0] >= point[0]:
-                        lemming.vel = (nextPoint[0] - point[0]) * 0.03, (nextPoint[1] - point[1]) * 0.03
+                    if collision and nextPoint[0] >= \
+                            point[0] and Interaction.getDistance(point, nextPoint) < 2:
+                        lemming.vel = (nextPoint[0] - point[0]) * 0.03,\
+                                      (nextPoint[1] - point[1]) * 0.03
                         lemming.isFalling = False
                         lemming.floor = floor
                         break
@@ -30,8 +37,7 @@ class Interaction(object):
             if index == len(pointList)-1:
                 break
 
-            if Interaction.getDistance(pos, point) <= 4:
-                # print("colision")
+            if Interaction.getDistance(pos, point) <= 5:
                 return True, point, pointList[index+1]
 
         return False, None, None
@@ -65,14 +71,24 @@ class Interaction(object):
 
     @staticmethod
     def getUnitVector(point1, point2):
+        """returns the unit vector betwen two bidimensional points"""
         catH = point2[0] - point1[0]
         catV = point2[1] - point1[1]
         modulo = math.sqrt(math.pow(catH, 2) + math.pow(catV, 2))
-        if modulo == 0: return 9999,9999
+        if modulo == 0:
+            return 9999, 9999
         return catH/modulo, catV/modulo
 
     @staticmethod
     def add(point1, point2):
+        """returns the sum of two bidimensional points"""
         return point2[0] + point1[0], point2[1] + point1[1]
+
+    @staticmethod
+    def getBoomY(radio, point, x):
+        """ returns the Y coordinate for the line in case of explosion """
+        # FIXME quizá sea mejor pasar toda la linea en lugar de la x y que se la recorte aquí dentro sin devolver nada
+        part = math.sqrt(radio*radio - math.pow(abs(point[0]-x), 2))
+        return part + point[1], part - point[1]
 
     # TODO comprabación lemming-lemming y sus complementos
