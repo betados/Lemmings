@@ -36,7 +36,7 @@ class Interaction(object):
             if index == len(pointList)-1:
                 break
 
-            if Interaction.getDistance(pos, point) <= 7:
+            if Interaction.getDistance(pos, point) <= 4:
                 return True, point, pointList[index+1]
 
         return False, None, None
@@ -88,6 +88,6 @@ class Interaction(object):
         """ returns the Y coordinate for the line in case of explosion """
         # FIXME quizá sea mejor pasar toda la linea en lugar de la x y que se la recorte aquí dentro sin devolver nada
         part = math.sqrt(radio*radio - math.pow(abs(point[0]-x), 2))
-        return part + point[1], part - point[1]
+        return point[1] + part, point[1] - part
 
     # TODO comprabación lemming-lemming y sus complementos

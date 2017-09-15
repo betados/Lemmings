@@ -124,26 +124,59 @@ class Lemming(object):
     def bomb(self, t):
         """ case """
         radio = self.ancho * 1.3
-
         self.timer += t
-        if self.timer >= 3000:
+        if self.timer >= 3:
+            self.vel = 0, 0
             # FIXME si no se repite no se borran bien
-            for _ in range(5):
-                self.vel = 0, 0
+            for _ in range(10):
                 for point in self.floor.pointList:
                     if abs(point[0] - self.knee[0]) < radio:
                         self.floor.pointList.remove(point)
                 for line in self.floor.rellenoLines:
                     if abs(line[0][0] - self.knee[0]) < radio:
                         y1, y2 = Interaction.getBoomY(radio, self.knee, line[0][0])
-                        if y1 > line[1][1]:
-                            # y1 = line[1][1]
+                        # print(y1, y2)
+                        y1 = int(y1)
+                        y2 = int(y2)
+                        # 1
+                        if line[1][1] >= y2 >= line[0][1] and line[1][1] >= y1 >= line[0][1]:
+                            print(1)
+                            # print(y1, y2)
+                            # print(line[0][1], line[1][1])
+                            newLine2 = [line[0], [line[0][0], y2]]
+                            newLine1 = [[line[0][0], y1], line[1]]
+                            self.floor.rellenoLines.remove(line)
+                            self.floor.rellenoLines.append(newLine2)
+                            self.floor.rellenoLines.append(newLine1)
+                            self.floor.pointList.append(newLine2[1])
+                            self.floor.pointList.append(newLine1[0])
+                            continue
+                        # 2
+                        if y2 < line[0][1] and line[1][1] >= y1 >= line[0][1]:
+                            # print(2)
+                            line[0] = [line[0][0], int(y1)]
+                            self.floor.pointList.append(line[0])
+                            continue
+                        # 3
+                        if line[1][1] >= y2 >= line[0][1] and line[1][1] > y1:
+                            print(3)
+                            line[1] = [line[0][0], int(y2)]
+                            self.floor.pointList.append(line[1])
+                            continue
+                        # 4
+                        if y2 < line[0][1] and y1 > line[1][1]:
+                            print(4)
                             self.floor.rellenoLines.remove(line)
                             continue
-                        if y1 < line[0][1]:
-                            y1 = line[0][1]
-                        line[0] = line[0][0], int(y1)
-                        self.floor.pointList.append(line[0])
+
+                        # if y1 > line[1][1]:
+                        #     # y1 = line[1][1]
+                        #     self.floor.rellenoLines.remove(line)
+                        #     continue
+                        # if y1 < line[0][1]:
+                        #     y1 = line[0][1]
+                        # line[0] = [line[0][0], int(y1)]
+                        # self.floor.pointList.append(line[0])
 
 
             self.action = "Walk"

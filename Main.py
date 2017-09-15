@@ -18,7 +18,7 @@ reloj = pygame.time.Clock()
 
 resolution = (800, 600)
 
-discreteDebugging = True
+discreteDebugging = False
 
 characterList = ["Stop", "Climb", "Stairway", "Bomb",
                  "Dig down", "Dig horiz.", "Dig diag.", "Parachute"]
