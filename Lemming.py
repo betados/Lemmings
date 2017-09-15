@@ -124,10 +124,12 @@ class Lemming(object):
     def bomb(self, t):
         """ case """
         radio = self.ancho * 1.3
-        self.vel = 0, 0
+
         self.timer += t
-        if self.timer >= 3:
-            for _ in range(10):
+        if self.timer >= 3000:
+            # FIXME si no se repite no se borran bien
+            for _ in range(5):
+                self.vel = 0, 0
                 for point in self.floor.pointList:
                     if abs(point[0] - self.knee[0]) < radio:
                         self.floor.pointList.remove(point)
@@ -152,18 +154,21 @@ class Lemming(object):
 
     def stairway(self, t):
         """ case """
+        self.timer += t
         self.vel = 0, 0
-        if self.stairCount % 1 == 0:
+        if self.timer >= 500:
+            self.timer = 0
             if self.stairPos is None:
                 self.stairPos = self.pos
             else:
                 self.stairPos = self.stairPos[0] + 7, self.stairPos[1] - 5
                 self.pos = self.stairPos
             self.complements.append(Step(self.stairPos, self.screen))
-        self.stairCount += 0.125
+            self.stairCount += 1
         if self.stairCount >= 15:
             self.stairCount = 0
             self.stairPos = None
+            self.action = "Walk"
 
     def dig(self, t):
         """ case """
