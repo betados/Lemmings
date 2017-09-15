@@ -29,7 +29,6 @@ class Interaction(object):
             if lemming.action == "Dig down":
                 pass
 
-
     @staticmethod
     def collideList(pos, pointList):
         """ checks if a point is colliding whith a point list"""
@@ -37,7 +36,7 @@ class Interaction(object):
             if index == len(pointList)-1:
                 break
 
-            if Interaction.getDistance(pos, point) <= 5:
+            if Interaction.getDistance(pos, point) <= 7:
                 return True, point, pointList[index+1]
 
         return False, None, None

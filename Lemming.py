@@ -127,19 +127,24 @@ class Lemming(object):
         self.vel = 0, 0
         self.timer += t
         if self.timer >= 3:
-            for line in self.floor.rellenoLines:
-                if abs(line[0][0] - self.knee[0]) < radio:
-                    # self.floor.rellenoLines.remove(line)
-                    y1, y2 = Interaction.getBoomY(radio, self.knee, line[0][0])
-                    line[0] = line[0][0], y1
-            for point in self.floor.pointList:
-                if abs(point[0] - self.knee[0]) < radio:
-                    self.floor.pointList.remove(point)
-            # self.action = "Walk"
+            for _ in range(10):
+                for point in self.floor.pointList:
+                    if abs(point[0] - self.knee[0]) < radio:
+                        self.floor.pointList.remove(point)
+                for line in self.floor.rellenoLines:
+                    if abs(line[0][0] - self.knee[0]) < radio:
+                        y1, y2 = Interaction.getBoomY(radio, self.knee, line[0][0])
+                        if y1 > line[1][1]:
+                            # y1 = line[1][1]
+                            self.floor.rellenoLines.remove(line)
+                            continue
+                        if y1 < line[0][1]:
+                            y1 = line[0][1]
+                        line[0] = line[0][0], int(y1)
+                        self.floor.pointList.append(line[0])
 
 
-
-
+            self.action = "Walk"
 
     def climb(self, t):
         """ case """
@@ -165,9 +170,12 @@ class Lemming(object):
         # dig down
         self.vel = 0, 0.01
 
-        for point in self.floor.pointList:
-            if Interaction.getDistance(self.knee, point) < self.ancho / 2:
-                self.floor.pointList.remove(point)
+        try:  # EAFP
+            for point in self.floor.pointList:
+                if Interaction.getDistance(self.knee, point) < self.ancho / 2:
+                    self.floor.pointList.remove(point)
+        except:
+            pass
 
         areLines = False
         for line in self.floor.rellenoLines:
