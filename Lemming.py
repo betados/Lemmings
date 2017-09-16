@@ -42,7 +42,6 @@ class Lemming(object):
         self.rect = pygame.Rect(self.pos, (self.ancho, self.alto))
         self.rect.bottomright = self.pos
         self.knee = 0, 0
-        self.isFalling = True
         self.action = "Walk"
         self.stairCount = 0
         self.stairPos = None
@@ -66,14 +65,13 @@ class Lemming(object):
                               "CLimb": self.climb, "Stairway": self.stairway,
                               "Bomb": self.bomb, "Dig down": self.dig,
                               "Dig horiz.": self.dig, "Dig diag.": self.dig,
-                              "Parachute": self.parachute}
+                              "Parachute": self.parachute, "Fall": self.fall}
 
     def actualize(self, t):
-        """Actualize the position and speed of the lemming"""
+        """ Actualize the position and speed of the lemming """
+
         if self.action is not None:
             self.characterDict[self.action](t)
-
-        # print(self.index, self.action, self.vel)
 
         self.pos = self.pos[0] + self.vel[0]*t, self.pos[1] + self.vel[1]*t
         self.rect.bottomright = self.pos
@@ -96,7 +94,7 @@ class Lemming(object):
     def getNextImage(self):
         """Return the corresponding image for the sprite"""
         side = 46
-        if self.isFalling:
+        if self.action == "Fall":
             self.fallingImagePointer += 1
             if self.fallingImagePointer >= self.totalFallingImages:
                 self.fallingImagePointer = 1
@@ -109,13 +107,17 @@ class Lemming(object):
 
     def isWalking(self):
         """Is the lemming walking?"""
-        return bool(self.action == "Walk")
+        return self.action == "Walk"
 
     # ACTIONS for switch-case statement
     def walk(self, t):
         """ case """
-        self.vel = self.vel[0] + 0.5 * self.accel[0] * t * t,\
-            self.vel[1] + 0.5 * self.accel[1] * t * t
+        pass
+        # self.vel = self.vel[0] + 0.5 * self.accel[0] * t * t,\
+        #     self.vel[1] + 0.5 * self.accel[1] * t * t
+    def fall(self, t):
+        """ case """
+        self.vel = 0, 0.1
 
     def stop(self, t):
         """ case """
@@ -125,7 +127,7 @@ class Lemming(object):
         """ case """
         radio = self.ancho * 1.3
         self.timer += t
-        if self.timer >= 3:
+        if self.timer >= 1:
             self.vel = 0, 0
             # FIXME si no se repite no se borran bien
             for _ in range(10):

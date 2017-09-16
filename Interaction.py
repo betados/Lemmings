@@ -11,7 +11,9 @@ class Interaction(object):
     def caminaRect(lemmingList, floorList):
         """ look each lemming checking if it is touching a floor"""
         for lemming in lemmingList.lista:
-            if lemming.action == "Walk":
+            if lemming.action == "Walk" or \
+               lemming.action == "Bomb" or \
+               lemming.action == "Fall":
                 for floor in floorList:
                     collision, point, nextPoint = \
                         Interaction.collideList(lemming.knee, floor.pointList)
@@ -20,12 +22,12 @@ class Interaction(object):
                             point[0] and Interaction.getDistance(point, nextPoint) < 2:
                         lemming.vel = (nextPoint[0] - point[0]) * 0.03,\
                                       (nextPoint[1] - point[1]) * 0.03
-                        lemming.isFalling = False
+                        if lemming.action == "Fall":
+                            lemming.action = "Walk"
                         lemming.floor = floor
                         break
                     else:
-                        lemming.isFalling = True
-                        lemming.vel = 0, 0.1
+                        lemming.action = "Fall"
             if lemming.action == "Dig down":
                 pass
 

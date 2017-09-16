@@ -14,7 +14,7 @@ if sys.platform == 'win32' or sys.platform == 'win64':
     os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 pygame.init()
-reloj = pygame.time.Clock()
+
 
 resolution = (800, 600)
 
@@ -28,12 +28,14 @@ pygame.display.set_caption('Lemmings')
 screen = pygame.display.set_mode(resolution)
 scenario = Scenario(screen, resolution, "maps/a.yaml", discreteDebugging)
 gui = Gui(resolution, screen, characterList, discreteDebugging)
-lemmingList = LemmingList(10, screen, discreteDebugging)
+lemmingQuantity = 10
+lemmingList = LemmingList(lemmingQuantity, screen, discreteDebugging)
 
 stateDict = dict()
 stateDict["isActionSelected"] = False
 done = False
-
+reloj = pygame.time.Clock()
+t = reloj.get_time()
 
 while not done:
 
@@ -45,8 +47,8 @@ while not done:
     for event in events:
         if event.type == pygame.QUIT:
             done = True
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            pass
+        # if event.type == pygame.MOUSEBUTTONDOWN:
+        #     pass
 
     # --- LA LÓGICA DEL JUEGO DEBERÍA IR AQUÍ
 
@@ -67,7 +69,6 @@ while not done:
             click = Interaction.isLemmingPressed(position, lemmingList.lista, stateDict)
             if click is not None:
                 stateDict["isActionSelected"] = False
-                # stateDict["actionSelected"] = click
 
     t = reloj.get_time()
 
@@ -83,7 +84,7 @@ while not done:
     pygame.display.flip()
 
     # --- Limitamos a 60 fotogramas por segundo (frames per second)
-    reloj.tick(100)
+    reloj.tick(60)
 
 # Cerramos la ventana y salimos.
 # Si te olvidas de esta última línea, el programa se 'colgará'
