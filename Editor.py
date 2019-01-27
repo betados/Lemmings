@@ -17,14 +17,12 @@ scenario = Scenario(resolution)
 pygame.display.set_caption('Lemmings map editor')
 screen = pygame.display.set_mode(resolution)
 
-
 WHITE = 100, 100, 100
 
 done = False
 previousPosition = -9999, -9999
 
 state = "drawing"
-
 
 text = eztext.Input(maxlength=45, color=(100, 0, 0), prompt='Scenario name: ')
 
@@ -45,18 +43,13 @@ while not done:
                 pass
 
         if pygame.mouse.get_pressed()[0] == 1:
-            movimiento = pygame.mouse.get_rel()
+            movement = pygame.mouse.get_rel()
             position = pygame.mouse.get_pos()
-            # print(movimiento)
-            if movimiento[0] != 0 or movimiento[1] != 0:
-                # print(position)
+            if movement[0] != 0 or movement[1] != 0:
                 scenario.add(position)
                 previousPosition = position
 
         # --- LA LÓGICA DEL JUEGO DEBERÍA IR AQUÍ
-
-        #     # y=y+0.2
-        #     avance = avance[0], avance[1]+1
 
         # SAVE
         if teclas[pygame.K_s]:

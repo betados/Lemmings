@@ -1,34 +1,27 @@
-
-import math
 import random
+
 import pygame
+from vector_2d import Vector
 
 
 class Floor(object):
 
     def __init__(self):
-        self.pointList = []
-        self.lastPoint = -9999, -9999
+        self.point_list = []
+        self.last_point = Vector(-9999, -9999)
         # self.color = random.randrange(256) / 255, random.randrange(256) / 255, random.randrange(256) / 255
         self.color = random.randrange(256) / 600, random.randrange(256) / 600, random.randrange(256) / 600
-        # print (self.color)
 
     def draw(self, screen):
+        if len(self.point_list) > 2:
+            pygame.draw.lines(screen, (100, 100, 100), False, list(self.get_points()), 1)  # filled
 
-        # print("dibuja")
-        # rect2 = pygame.draw.rect(screen,(255,255,255), (100, 20, 60, 60), 3)  # not filled
-        if len(self.pointList) > 2:
-            pygame.draw.lines(screen, (100, 100, 100), False, self.pointList, 1)  # filled
-
-    def getPoints(self):
-        return self.pointList
-
-    def getDistance(self,pointP, pointQ):
-        dist = math.sqrt(math.pow(pointQ[0] - pointP[0], 2) + math.pow(pointQ[1] - pointP[1], 2))
-        return dist
+    def get_points(self):
+        for point in self.point_list:
+            yield point()
 
     def add(self, point):
-        self.pointList.append(point)
+        self.point_list.append(Vector(*point))
 
 
 class Scenario(object):
@@ -50,19 +43,9 @@ class Scenario(object):
     def save(self, name):
         import yaml
 
-        floorList_pointList = []
-        for floor in self.floorList:
-            floorList_pointList.append("floor")
-            floorList_pointList.append(floor.pointList)
+        yaml.dump(self.floorList, open("maps/" + name + '.yaml', 'w'))
 
-        yaml.dump(floorList_pointList, open("maps/"+name + '.yaml', 'w'))
-        # print(floorList_pointList)
-
-    def draw(self,screen):
-        # color = 0, 0, 1
-
+    def draw(self, screen):
         # FLOORS
         for floor in self.floorList:
             floor.draw(screen)
-
-

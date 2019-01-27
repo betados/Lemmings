@@ -28,13 +28,6 @@ class Floor(object):
         for i, point in enumerate(pointList):
             self.pointList.append(point)
             if i < len(pointList)-1:
-                # while Interaction.getDistance(self.pointList[len(self.pointList)-1],
-                #                               pointList[i+1]) > 2:
-                #     unitVector = Interaction.getUnitVector(self.pointList[len(self.pointList)-1], pointList[i+i])
-                #     next = Interaction.add(self.pointList[len(self.pointList)-1], unitVector)
-                #     print(next, unitVector)
-                #     self.pointList.append((int(next[0]), int(next[1])))
-                #     self.draw()
                 if (pointList[i+1][0] - point[0]) > 1:
                     for x in range(point[0]+1, pointList[i+1][0]):
                         self.pointList.append((x, point[1]))
