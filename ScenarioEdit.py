@@ -10,8 +10,6 @@ class Floor(object):
         self.screen = screen
         self.point_list = []
         self.last_point = Vector(-9999, -9999)
-        # self.color = random.randrange(256) / 255, random.randrange(256) / 255, random.randrange(256) / 255
-        self.color = random.randrange(256) / 600, random.randrange(256) / 600, random.randrange(256) / 600
 
     def draw(self):
         if len(self.point_list) > 2:

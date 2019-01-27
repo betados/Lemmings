@@ -54,6 +54,7 @@ class Lemming(object):
 
         self.vel = Vector(0, 0.1)
         self.accel = Vector(0, 0)
+
         self.sprite = Sprite()
         self.totalWalkingImages = 7
         self.walkingImagePointer = random.randrange(7)
@@ -75,12 +76,12 @@ class Lemming(object):
     def actualize(self, t):
         """ Actualize the position and speed of the lemming """
 
-        if self.action is not None:
+        if self.action:
             self.characterDict[self.action](t)
 
         self.pos = self.pos + self.vel * t
         self.rect.bottomright = self.pos()
-        self.knee = self.pos - Vector(self.ancho / 2,  self.ancho / 2 + 3)
+        self.knee = self.pos - Vector(self.ancho / 2, self.ancho / 2 + 3)
 
     def draw(self, screen, discreteDebugging):
         """Draw the lemming"""
@@ -143,14 +144,11 @@ class Lemming(object):
                 for line in self.floor.rellenoLines:
                     if abs(line[0][0] - self.knee[0]) < radio:
                         y1, y2 = Interaction.getBoomY(radio, self.knee, line[0][0])
-                        # print(y1, y2)
                         y1 = int(y1)
                         y2 = int(y2)
                         # 1
                         if line[1][1] >= y2 >= line[0][1] and line[1][1] >= y1 >= line[0][1]:
                             print(1)
-                            # print(y1, y2)
-                            # print(line[0][1], line[1][1])
                             newLine2 = [line[0], [line[0][0], y2]]
                             newLine1 = [[line[0][0], y1], line[1]]
                             self.floor.rellenoLines.remove(line)
@@ -160,8 +158,8 @@ class Lemming(object):
                             self.floor.pointList.append(newLine1[0])
                             continue
                         # 2
-                        if y2 < line[0][1] and line[1][1] >= y1 >= line[0][1]:
-                            # print(2)
+                        if y2 < line[0].y and line[1].y >= y1 >= line[0].y:
+                            print(2)
                             line[0] = [line[0][0], int(y1)]
                             self.floor.pointList.append(line[0])
                             continue
@@ -198,10 +196,10 @@ class Lemming(object):
         self.vel = Vector()
         if self.timer >= 500:
             self.timer = 0
-            if self.stairPos is None:
+            if not self.stairPos:
                 self.stairPos = self.pos
             else:
-                self.stairPos += Vector(7, - 5)
+                self.stairPos += Vector(7, -5)
                 self.pos = self.stairPos
             self.complements.append(Step(self.stairPos, self.screen))
             self.stairCount += 1
@@ -215,12 +213,13 @@ class Lemming(object):
         # dig down
         self.vel = Vector(0, 0.01)
 
-        try:  # EAFP
-            for point in self.floor.pointList:
-                if Interaction.getDistance(self.knee, point) < self.ancho / 2:
-                    self.floor.pointList.remove(point)
-        except:
-            pass
+        remove_list = []
+        for i, point in enumerate(self.floor.pointList):
+            if abs(self.knee - point) < self.ancho / 2:
+                remove_list.append(i)
+        remove_list.sort(reverse=True)
+        for index in remove_list:
+            self.floor.pointList.pop(index)
 
         areLines = False
         for line in self.floor.rellenoLines:
@@ -232,6 +231,7 @@ class Lemming(object):
                 line[0] += Vector(0, 1)
                 self.floor.pointList.append(line[0])
                 areLines = True
+        # self.floor.connect()
 
         if not areLines:
             self.action = "Walk"
