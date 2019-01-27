@@ -224,12 +224,12 @@ class Lemming(object):
 
         areLines = False
         for line in self.floor.rellenoLines:
-            if Interaction.getDistance(self.knee, line[0]) < self.ancho / 2:
+            if abs(self.knee - line[0]) < self.ancho / 2:
                 # si la linea se acaba se quita de la lista
-                if line[0][1] >= line[1][1]:
+                if line[0].y >= line[1].y:
                     self.floor.rellenoLines.remove(line)
                     continue
-                line[0][1] += 1
+                line[0] += Vector(0, 1)
                 self.floor.pointList.append(line[0])
                 areLines = True
 

@@ -48,7 +48,7 @@ class Floor(object):
             self.complete(self.pointList[len(self.pointList) - 1], self.pointList[0], self.pointList, axis=1)
 
         # RELLENO
-        if False:
+        if True:
             # Cuadrado donde buscar para rellenar
             pointRange = [[9999, 0], [9999, 0]]
             for point in self.pointList:
@@ -64,7 +64,7 @@ class Floor(object):
                 init = None
                 end = None
                 for y in range(pointRange[1][0] - 10, pointRange[1][1] + 10):
-                    if point in self.pointList:
+                    if Vector(x, y) in self.pointList:
                         if trigered and y - yAnt > 5:
                             yAnt = y
                             trigered = False
@@ -77,7 +77,9 @@ class Floor(object):
                     if trigered:
                         pass
                 if init is not None and end is not None:
-                    self.rellenoLines.append([init, end])
+                    self.rellenoLines.append(
+                        [Vector(*init), Vector(*end)]
+                    )
 
     @staticmethod
     def complete(point1, point2, pointList, axis=0):
@@ -101,7 +103,7 @@ class Floor(object):
         for point in self.relleno:
             pygame.draw.circle(screen, (100, 100, 10), point(), 1, 1)
         for line in self.rellenoLines:
-            pygame.draw.lines(screen, (100, 100, 10), False, (line[0], line[1]), 1)
+            pygame.draw.lines(screen, (100, 100, 10), False, (line[0](), line[1]()), 1)
 
 
 class Sprite(pygame.sprite.Sprite):
