@@ -13,9 +13,9 @@ pygame.init()
 reloj = pygame.time.Clock()
 
 resolution = (800, 600)
-scenario = Scenario(resolution)
-pygame.display.set_caption('Lemmings map editor')
 screen = pygame.display.set_mode(resolution)
+scenario = Scenario(screen, resolution)
+pygame.display.set_caption('Lemmings map editor')
 
 WHITE = 100, 100, 100
 
@@ -70,7 +70,7 @@ while not done:
         if teclas[pygame.K_ESCAPE]:
             done = True
 
-    scenario.draw(screen)
+    scenario.draw()
 
     if state == "saving" and events != 0:
         if teclas[pygame.K_RETURN] or teclas[pygame.K_KP_ENTER]:

@@ -26,7 +26,7 @@ characterList = ["Stop", "Climb", "Stairway", "Bomb",
 
 pygame.display.set_caption('Lemmings')
 screen = pygame.display.set_mode(resolution)
-scenario = Scenario(screen, resolution, "maps/a.yaml", discreteDebugging)
+scenario = Scenario(screen, resolution, "maps/.yaml", discreteDebugging)
 gui = Gui(resolution, screen, characterList, discreteDebugging)
 lemmingQuantity = 10
 lemmingList = LemmingList(lemmingQuantity, screen, discreteDebugging)
