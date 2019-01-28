@@ -4,10 +4,11 @@ The lemming sprite module.
 """
 
 import random
+
 import pygame
+from vector_2d import Vector
 
 from Interaction import Interaction
-from vector_2d import Vector
 
 
 class LemmingList(object):
@@ -148,9 +149,8 @@ class Lemming(object):
                         y2 = int(y2)
                         # 1
                         if line[1][1] >= y2 >= line[0][1] and line[1][1] >= y1 >= line[0][1]:
-                            print(1)
-                            newLine2 = [line[0], [line[0][0], y2]]
-                            newLine1 = [[line[0][0], y1], line[1]]
+                            newLine2 = [line[0], Vector(line[0][0], y2)]
+                            newLine1 = [Vector(line[0][0], y1), line[1]]
                             self.floor.rellenoLines.remove(line)
                             self.floor.rellenoLines.append(newLine2)
                             self.floor.rellenoLines.append(newLine1)

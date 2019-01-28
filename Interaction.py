@@ -9,16 +9,15 @@ class Interaction(object):
     """ static class in charge of checking interaction between different elements"""
 
     @staticmethod
-    def caminaRect(lemmingList, floorList):
+    def caminaRect(lemmingList, floor_list):
         """ look each lemming checking if it is touching a floor"""
         for lemming in lemmingList:
             if lemming.action in ("Walk", "Bomb", "Fall"):
-                for floor in floorList:
-                    collision, point, nextPoint = \
-                        Interaction.collideList(lemming.knee, floor.pointList)
+                for floor in floor_list:
+                    collision, point, next_point = Interaction.collide_list(lemming.knee, floor.pointList)
                     # TODO tener en cuenta la inclinacion para caer o no poder avanzar
-                    if collision and nextPoint[0] >= point[0] and abs(point - nextPoint) < 2:
-                        lemming.vel = (nextPoint - point) * 0.03
+                    if collision and next_point.x >= point.x and abs(point - next_point) < 2:
+                        lemming.vel = (next_point - point) * 0.03
                         if lemming.action == "Fall":
                             lemming.action = "Walk"
                         lemming.floor = floor
@@ -29,14 +28,11 @@ class Interaction(object):
                 pass
 
     @staticmethod
-    def collideList(pos, pointList):
+    def collide_list(pos, pointList):
         """ checks if a point is colliding whith a point list"""
-        for index, point in enumerate(pointList):
-            if index == len(pointList) - 1:
-                break
-
+        for i, point in enumerate(pointList):
             if abs(pos - point) <= 4:
-                return True, point, pointList[index + 1]
+                return True, point, pointList[i + 1]
 
         return False, None, None
 

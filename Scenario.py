@@ -26,19 +26,19 @@ class PointList(object):
     def lowest(self):
         return sorted(self.lista, key=lambda point: point.y)[-1]
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: int):
         return self.lista[item]
 
-    def append(self, element):
+    def append(self, element: Vector):
         self.lista.append(element)
 
-    def remove(self, item):
+    def remove(self, item: Vector):
         self.lista.remove(item)
 
-    def pop(self, index=-1):
+    def pop(self, index: int = -1):
         return self.lista.pop(index)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.lista)
 
 
@@ -47,7 +47,7 @@ class Floor(object):
 
     def __init__(self, size, pointList, discreteDebugging):
         self.size = size
-        self.relleno = []
+        self.relleno: str = []
         self.rellenoLines = []
         self.pointListAdded = []
         if discreteDebugging:
@@ -81,12 +81,12 @@ class Floor(object):
 
         # RELLENO
         if True:
-            for x in range(self.pointList.leftest.x, self.pointList.rightest.x+1):
+            for x in range(self.pointList.leftest.x, self.pointList.rightest.x + 1):
                 trigered = False
                 yAnt = 0
                 init = None
                 end = None
-                for y in range(self.pointList.highest.y, self.pointList.lowest.y+1):
+                for y in range(self.pointList.highest.y, self.pointList.lowest.y + 1):
                     if Vector(x, y) in self.pointList:
                         if trigered and y - yAnt > 5:
                             yAnt = y

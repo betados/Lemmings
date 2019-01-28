@@ -10,7 +10,7 @@ class TestAlvaro(unittest.TestCase):
             self.assertEqual(Interaction.getDistance(point1, point2), i)
 
     def test_collideList(self):
-        self.assertEqual(Interaction.collideList((0, 0), [(0, 0), (1, 1)]),
+        self.assertEqual(Interaction.collide_list((0, 0), [(0, 0), (1, 1)]),
                          (True, (0, 0), (1, 1)))
 
 if __name__ == '__main__':

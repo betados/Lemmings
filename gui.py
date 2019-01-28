@@ -43,7 +43,7 @@ class Button(object):
         self.width = width
         self.coordinates = [(x, y), (x+width, y), (x+width, y+height), (x, y+height)]
         self.text = text
-        self.font = pygame.font.SysFont("calibri", 20)
+        self.font = pygame.font.SysFont("Arial", 20)
         if discreteDebugging:
             self.color = 25, 0, 25
         else:
