@@ -51,7 +51,7 @@ class PointList(object):
         self.set.remove(item)
 
     def pop(self, index: int = -1):
-        return self.set.pop(index)
+        raise NotImplementedError
 
     def __len__(self) -> int:
         return len(self.set)
