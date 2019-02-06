@@ -20,7 +20,6 @@ pygame.display.set_caption('Lemmings map editor')
 WHITE = 100, 100, 100
 
 done = False
-previousPosition = -9999, -9999
 
 state = "drawing"
 
@@ -47,7 +46,6 @@ while not done:
             position = pygame.mouse.get_pos()
             if movement[0] != 0 or movement[1] != 0:
                 scenario.add(position)
-                previousPosition = position
 
         # --- LA LÓGICA DEL JUEGO DEBERÍA IR AQUÍ
 
@@ -99,7 +97,7 @@ while not done:
 
     # --- Limitamos a 60 fotogramas por segundo (frames per second)
     # print("iteracion")
-    reloj.tick(500)
+    reloj.tick(60)
 
 # Cerramos la ventana y salimos.
 # Si te olvidas de esta última línea, el programa se 'colgará'

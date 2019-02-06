@@ -28,22 +28,18 @@ class Scenario(object):
     def __init__(self, screen, res):
         self.screen = screen
         self.res = res
-        self.index = -1
         self.floor_list = []
 
     def newFloor(self):
         self.floor_list.append(Floor(self.screen))
-        self.index += 1
 
     def add(self, point):
-        self.floor_list[self.index].add(point)
+        self.floor_list[-1].add(point)
 
     def save(self, name):
         import yaml
         from Scenario import Floor
-        new_floor_style_list = []
-        for floor in self.floor_list:
-            new_floor_style_list.append(Floor(self.res, floor.point_list, False))
+        new_floor_style_list = [Floor(self.res, floor.point_list, False) for floor in self.floor_list]
 
         yaml.dump(new_floor_style_list, open("maps/" + name + '.yaml', 'w'))
 
