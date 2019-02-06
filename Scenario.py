@@ -3,7 +3,7 @@
 """
 import pygame
 import yaml
-from vector_2d import Vector, VectorPolar
+from vector_2d import Vector
 
 from pointList import PointList
 
@@ -22,36 +22,10 @@ class Floor(object):
             self.color = 0, 0, 255
         self.pointList = PointList()
 
-        # self.fill()
-        # RELLENO
-        # if True:
-        #     for x in range(self.pointList.leftest.x, self.pointList.rightest.x + 1):
-        #         trigered = False
-        #         yAnt = 0
-        #         init = None
-        #         end = None
-        #         for y in range(self.pointList.highest.y, self.pointList.lowest.y + 1):
-        #             if Vector(x, y) in self.pointList:
-        #                 if trigered and y - yAnt > 5:
-        #                     yAnt = y
-        #                     trigered = False
-        #                     end = [x, y]
-        #                 if not trigered and y - yAnt > 5:
-        #                     yAnt = y
-        #                     trigered = True
-        #                     init = [x, y]
-        #                     continue
-        #             if trigered:
-        #                 pass
-        #         if init is not None and end is not None:
-        #             self.rellenoLines.append(
-        #                 [Vector(*init), Vector(*end)]
-        #             )
-
     def connect(self):
         # Rellena si faltan puntos entremedias
         # FIXME a veces sale del while sin tener que hacerlo por eso lo ejecuto varias veces
-        for _ in range(5):
+        for _ in range(9):
             fake_list = self.pointList.lista[:]
             for i, p in enumerate(fake_list):
                 line = p - fake_list[i - 1]
@@ -63,33 +37,27 @@ class Floor(object):
 
         print('connected')
 
-        # line = self.pointList[i] - self.pointList[i - 1]
-        # if abs(line) > 1.5:
-        #     self.pointList.append((line.unit() + self.pointList[i - 1]).int_vector())
-        #     line = self.pointList[i] - self.pointList[-1]
-        #     while (line.unit() + self.pointList[-1]).int_vector() not in self.pointList:
-        #         line = self.pointList[i] - self.pointList[-1]
-        #         print((line.unit() + self.pointList[-1]).int_vector())
-        #         self.pointList.append((line.unit() + self.pointList[-1]).int_vector())
-
     def fill(self):
-        middle = ((self.pointList.leftest + self.pointList.rightest + self.pointList.highest + self.pointList.lowest)
-                  / 4).int_vector()
-        inside = self.point_is_inside_closed_lines(middle)
-        if inside:
-            self.relleno_points.append(middle)
-        polar_vector = VectorPolar(1, 0)
-        previous_point = Vector(999, 999)
-        for i in range(9999):
-            point = (middle + polar_vector.to_cartesian()).int_vector()
-            if point in self.pointList and previous_point not in self.pointList:
-                inside = not inside
-            elif inside:
-                self.relleno_points.append(point)
-            polar_vector = polar_vector + polar_vector.normal().unit()
-            previous_point = point
+        vertical_set = set()
+        for x in range(int(self.pointList.leftest.x + 1), int(self.pointList.rightest.x)):
+            inside = False
+            for y in range(int(self.pointList.highest.y - 1), int(self.pointList.lowest.y)):
+                if Vector(x, y) in self.pointList.set:
+                    inside = not inside
+                elif inside:
+                    vertical_set.add(Vector(x, y))
 
-        print(self.relleno_points)
+        horizontal_set = set()
+        for y in range(int(self.pointList.highest.y + 1), int(self.pointList.lowest.y)):
+            inside = False
+            for x in range(int(self.pointList.leftest.x - 1), int(self.pointList.rightest.x)):
+                if Vector(x, y) in self.pointList.set:
+                    inside = not inside
+                elif inside:
+                    horizontal_set.add(Vector(x, y))
+
+        self.relleno_points += list((vertical_set.intersection(horizontal_set)))
+        print('filled')
 
     def point_is_inside_closed_lines(self, point):
         """
@@ -97,9 +65,9 @@ class Floor(object):
         """
         # FIXME no funciona perfecto todas las veces
         if point.y > self.size[1] / 2:
-            rango = (0, self.size[1] - point.y, 1)
+            rango = (0, int(self.size[1] - point.y), 1)
         else:
-            rango = (0, -point.y, -1)
+            rango = (0, -int(point.y), -1)
         times = 0
         for i in range(*rango):
             p = point + Vector(0, i)
@@ -151,7 +119,7 @@ class Floor(object):
         for point in self.relleno:
             pygame.draw.circle(screen, (100, 100, 10), point(), 1, 1)
         for point in self.relleno_points:
-            pygame.draw.circle(screen, (100, 100, 10), point(), 1, 1)
+            pygame.draw.circle(screen, (100, 100, 10), point.int(), 1, 1)
             # pygame.draw.lines(screen, (100, 100, 10), False, (line[0](), line[1]()), 1)
 
         pygame.draw.circle(screen, (255, 0, 0), self.pointList.rightest.int(), 3, 3)
@@ -192,7 +160,7 @@ class Scenario(object):
         for floor in self.floor_list:
             floor.connect()
             # floor.complete_select_strategy()
-            # floor.fill()
+            floor.fill()
 
         yaml.dump(self.floor_list, open("maps/" + name + '.yaml', 'w'))
 
