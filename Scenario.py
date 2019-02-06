@@ -38,15 +38,14 @@ class PointList(object):
         self.lista = [lista_n.pop(), ]
         while len(lista_n) > 0:
             nearest = 0
-            i = 0
             for i, v in enumerate(lista_n):
                 if abs(self.lista[-1] - v) < abs(self.lista[-1] - lista_n[nearest]):
                     nearest = i
-            self.lista.append(lista_n.pop(i))
+            self.lista.append(lista_n.pop(nearest))
 
     def append(self, element: Vector):
         self.set.add(element)
-        self.lista = [e for e in self.set]
+        self.lista = list(self.set)
         self.sort()
         # print(self.lista)
 
