@@ -97,7 +97,7 @@ while not done:
         if teclas[pygame.K_ESCAPE]:
             done = True
 
-    if status == "saving" and events != 0:
+    elif status == "saving" and events != 0:
         if teclas[pygame.K_RETURN] or teclas[pygame.K_KP_ENTER]:
             scenario.save(text.getInput())
             status = "playing"
@@ -111,7 +111,7 @@ while not done:
         label = myfont.render("To save press enter", 1, (0, 100, 255))
         screen.blit(label, (resolution[0] / 50, resolution[1] - size))
 
-    if status == 'playing':
+    elif status == 'playing':
 
         if pygame.mouse.get_pressed()[0] == 1:
             position = pygame.mouse.get_pos()
@@ -139,7 +139,7 @@ while not done:
     pygame.display.flip()
 
     # --- Limitamos a 60 fotogramas por segundo (frames per second)
-    reloj.tick(30)
+    reloj.tick(60)
 
 # Cerramos la ventana y salimos.
 # Si te olvidas de esta última línea, el programa se 'colgará'
