@@ -19,8 +19,7 @@ class LemmingList(object):
         self.discreteDebugging = discreteDebugging
 
         for i in range(quantity):
-            lemming = Lemming(i, screen)
-            self.lista.append(lemming)
+            self.lista.append(Lemming(i, screen))
 
     def draw(self, t, screen):
         """ Atualize position and draw each lemming"""
@@ -42,7 +41,7 @@ class Lemming(object):
     def __init__(self, index, screen):
         self.screen = screen
         self.index = index
-        self.pos = Vector(30, (index - 10) * 100)
+        self.pos = Vector(30, (index - 15) * 100)
         self.alto = 36
         self.ancho = 22
         self.rect = pygame.Rect(self.pos(), (self.ancho, self.alto))
