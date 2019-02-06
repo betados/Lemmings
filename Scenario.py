@@ -50,18 +50,27 @@ class Floor(object):
 
     def connect(self):
         # Rellena si faltan puntos entremedias
-        # FIXME rellena en horizontal cuando deberia rellenar con una linea desde un punto hasta otro
-        print(self.pointList)
-        i = 0
-        while i < len(self.pointList):
-            line = self.pointList[i] - self.pointList[i - 1]
-            if abs(line) > 1.5:
-                self.pointList.append((line.unit() + self.pointList[i - 1]).int_vector())
-                line = self.pointList[i] - self.pointList[-1]
-                while (line.unit() + self.pointList[-1]).int_vector() not in self.pointList:
-                    line = self.pointList[i] - self.pointList[-1]
-                    print((line.unit() + self.pointList[-1]).int_vector())
-                    self.pointList.append((line.unit() + self.pointList[-1]).int_vector())
+        # FIXME a veces sale del while sin tener que hacerlo por eso lo ejecuto varias veces
+        for _ in range(5):
+            fake_list = self.pointList.lista[:]
+            for i, p in enumerate(fake_list):
+                line = p - fake_list[i - 1]
+                if abs(line) > 1.5:
+                    j = 1
+                    while (line.unit() * j + fake_list[i - 1]).int_vector() not in self.pointList.set:
+                        self.pointList.append(line.unit() * j + fake_list[i - 1])
+                        j += 1
+
+        print('connected')
+
+        # line = self.pointList[i] - self.pointList[i - 1]
+        # if abs(line) > 1.5:
+        #     self.pointList.append((line.unit() + self.pointList[i - 1]).int_vector())
+        #     line = self.pointList[i] - self.pointList[-1]
+        #     while (line.unit() + self.pointList[-1]).int_vector() not in self.pointList:
+        #         line = self.pointList[i] - self.pointList[-1]
+        #         print((line.unit() + self.pointList[-1]).int_vector())
+        #         self.pointList.append((line.unit() + self.pointList[-1]).int_vector())
 
     def fill(self):
         middle = ((self.pointList.leftest + self.pointList.rightest + self.pointList.highest + self.pointList.lowest)
@@ -105,19 +114,6 @@ class Floor(object):
         else:
             return False
 
-    # def connect(self):
-    #     new_point_list = []
-    #     for i in range(-1, (len(self.pointList)) * -1, -1):
-    #         new_point_list.append(self.pointList[i])
-    #         if (self.pointList[i - 1].x - self.pointList[i].x) > 1:
-    #             for x in range(self.pointList[i].x + 1, self.pointList[i - 1].x):
-    #                 new_point_list.append(Vector(x, self.pointList[i].y))
-    #         if (self.pointList[i].x - self.pointList[i - 1].x) > 1:
-    #             for x in range(self.pointList[i - 1].x, self.pointList[i].x + 1):
-    #                 new_point_list.append(Vector(x, self.pointList[i].y))
-    #
-    #     self.pointList = new_point_list
-
     def complete_select_strategy(self):
         if abs(self.pointList[-1] - self.pointList[0]) < 100:
             print("cierra el circulo")
@@ -146,10 +142,10 @@ class Floor(object):
     def draw(self, screen):
         """ draw the floor """
         #
-        for i, point in enumerate(self.pointList.lista):
-            pygame.draw.circle(screen, self.color, point(), 2, 2)
-            text = pygame.font.Font(None, 15).render(str(i), 1, (0, 255, 0))
-            screen.blit(text, point())
+        for i, point in enumerate(self.pointList.set):
+            pygame.draw.circle(screen, self.color, point.int(), 2, 2)
+            # text = pygame.font.Font(None, 15).render(str(i), 1, (0, 255, 0))
+            # screen.blit(text, point())
         for point in self.pointListAdded:
             pygame.draw.circle(screen, (100, 0, 0), point(), 4, 4)
         for point in self.relleno:
@@ -158,10 +154,10 @@ class Floor(object):
             pygame.draw.circle(screen, (100, 100, 10), point(), 1, 1)
             # pygame.draw.lines(screen, (100, 100, 10), False, (line[0](), line[1]()), 1)
 
-        pygame.draw.circle(screen, (255, 0, 0), self.pointList.rightest(), 3, 3)
-        pygame.draw.circle(screen, (255, 0, 0), self.pointList.leftest(), 3, 3)
-        pygame.draw.circle(screen, (255, 0, 0), self.pointList.highest(), 3, 3)
-        pygame.draw.circle(screen, (255, 0, 0), self.pointList.lowest(), 3, 3)
+        pygame.draw.circle(screen, (255, 0, 0), self.pointList.rightest.int(), 3, 3)
+        pygame.draw.circle(screen, (255, 0, 0), self.pointList.leftest.int(), 3, 3)
+        pygame.draw.circle(screen, (255, 0, 0), self.pointList.highest.int(), 3, 3)
+        pygame.draw.circle(screen, (255, 0, 0), self.pointList.lowest.int(), 3, 3)
 
     def add(self, point):
         self.pointList.append(Vector(*point))

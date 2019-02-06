@@ -139,7 +139,7 @@ while not done:
     pygame.display.flip()
 
     # --- Limitamos a 60 fotogramas por segundo (frames per second)
-    reloj.tick(5)
+    reloj.tick(30)
 
 # Cerramos la ventana y salimos.
 # Si te olvidas de esta última línea, el programa se 'colgará'
