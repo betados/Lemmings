@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """ Check the interaction between the elements in the game """
+from vector_2d import Vector
 
 import math
 
@@ -14,10 +15,10 @@ class Interaction(object):
         for lemming in lemmingList:
             if lemming.action in ("Walk", "Bomb", "Fall"):
                 for floor in floor_list:
-                    collision, point, next_point = Interaction.collide_list(lemming.knee, floor.pointList)
+                    collision, vel = Interaction.collide_list(lemming.knee.int_vector(), floor)
                     # TODO tener en cuenta la inclinacion para caer o no poder avanzar
-                    if collision and next_point.x >= point.x and abs(point - next_point) < 2:
-                        lemming.vel = (next_point - point) * 0.03
+                    if collision:
+                        lemming.vel = vel
                         if lemming.action == "Fall":
                             lemming.action = "Walk"
                         lemming.floor = floor
@@ -28,13 +29,18 @@ class Interaction(object):
                 pass
 
     @staticmethod
-    def collide_list(pos, pointList):
+    def collide_list(pos: Vector, floor):
         """ checks if a point is colliding whith a point list"""
-        for i, point in enumerate(pointList):
-            if abs(pos - point) <= 4:
-                return True, point, pointList[i + 1]
-
-        return False, None, None
+        if pos in floor.relleno:
+            if pos - Vector(0, 5) in floor.relleno:
+                if pos - Vector(0, 10) in floor.relleno:
+                    return True, Vector(0, 0)
+                else:
+                    return True, Vector(1, -1) * 0.02
+            else:
+                return True, Vector(0.03, 0)
+        else:
+            return False, None
 
     @staticmethod
     def isButtonPressed(pos, buttonList):
@@ -58,7 +64,7 @@ class Interaction(object):
 
     @staticmethod
     def getUnitVector(point1, point2):
-        """returns the unit vector betwen two bidimensional points"""
+        """returns the unit vector between two bidimensional points"""
         catH = point2[0] - point1[0]
         catV = point2[1] - point1[1]
         modulo = math.sqrt(math.pow(catH, 2) + math.pow(catV, 2))
