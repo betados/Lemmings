@@ -14,8 +14,7 @@ class Floor(object):
 
     def __init__(self, size, discreteDebugging=False):
         self.size = size
-        self.relleno_points = []
-        self.pointListAdded = []
+        self.relleno_points = set()
         if discreteDebugging:
             self.color = 0, 0, 150
         else:
@@ -24,7 +23,6 @@ class Floor(object):
 
     def connect(self):
         """ Rellena si faltan puntos entremedias """
-        # FIXME a veces sale del while sin tener que hacerlo por eso lo ejecuto varias veces
         self.pointList.set = set(self.pointList.lista)
         original_set = set(self.pointList.lista)
         for i, p in enumerate(self.pointList.lista):
@@ -41,12 +39,12 @@ class Floor(object):
         for x in range(int(self.pointList.leftest.x + 1), int(self.pointList.rightest.x)):
             inside = False
             for y in range(int(self.pointList.highest.y - 1), int(self.pointList.lowest.y)):
-                if Vector(x, y) in self.pointList.set and Vector(x, y-1) not in self.pointList.set:
+                if Vector(x, y) in self.pointList.set and Vector(x, y - 1) not in self.pointList.set:
                     inside = not inside
                 elif inside:
                     vertical_set.add(Vector(x, y))
 
-        self.relleno_points += list(vertical_set)
+        self.relleno_points = vertical_set
         print('filled')
 
     def point_is_inside_closed_lines(self, point):
@@ -74,17 +72,12 @@ class Floor(object):
 
     def draw(self, screen):
         """ draw the floor """
-        #
         for i, point in enumerate(self.pointList.lista):
             pygame.draw.circle(screen, self.color, point.int(), 1, 1)
         for i, point in enumerate(self.pointList.set):
             pygame.draw.circle(screen, self.color, point.int(), 1, 1)
             # text = pygame.font.Font(None, 15).render(str(i), 1, (0, 255, 0))
             # screen.blit(text, point())
-        for point in self.pointListAdded:
-            pygame.draw.circle(screen, (100, 0, 0), point(), 4, 4)
-        # for point in self.relleno:
-        #     pygame.draw.circle(screen, (100, 100, 10), point(), 1, 1)
         for point in self.relleno_points:
             pygame.draw.circle(screen, (100, 100, 10), point.int(), 1, 1)
             # pygame.draw.lines(screen, (100, 100, 10), False, (line[0](), line[1]()), 1)
