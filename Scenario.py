@@ -14,7 +14,7 @@ class Floor(object):
 
     def __init__(self, size, discreteDebugging=False):
         self.size = size
-        self.relleno_points = set()
+        self.relleno = set()
         if discreteDebugging:
             self.color = 0, 0, 150
         else:
@@ -44,7 +44,7 @@ class Floor(object):
                 elif inside:
                     vertical_set.add(Vector(x, y))
 
-        self.relleno_points = vertical_set
+        self.relleno = vertical_set
         print('filled')
 
     def point_is_inside_closed_lines(self, point):
@@ -78,7 +78,7 @@ class Floor(object):
             pygame.draw.circle(screen, self.color, point.int(), 1, 1)
             # text = pygame.font.Font(None, 15).render(str(i), 1, (0, 255, 0))
             # screen.blit(text, point())
-        for point in self.relleno_points:
+        for point in self.relleno:
             pygame.draw.circle(screen, (100, 100, 10), point.int(), 1, 1)
             # pygame.draw.lines(screen, (100, 100, 10), False, (line[0](), line[1]()), 1)
 

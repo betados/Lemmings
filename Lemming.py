@@ -152,7 +152,7 @@ class Lemming(object):
                 if abs(point - self.knee) < self.bomb_radius:
                     self.floor.pointList.remove(point)
 
-            self.floor.relleno_points = self.floor.relleno_points.difference(
+            self.floor.relleno = self.floor.relleno.difference(
                 set(self.knee.int_vector() + point for point in self.bomb_set))
 
             # self.action = "Walk"
