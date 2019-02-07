@@ -28,10 +28,14 @@ class PointList(object):
     def __iter__(self):
         return iter(self.__lista)
 
-    @property
-    def lista(self):
+    def order_list(self):
         self.__lista = list(self.set)
         self.sort()
+
+    @property
+    def lista(self):
+        # self.__lista = list(self.set)
+        # self.sort()
         return self.__lista
 
     def sort(self):
@@ -44,8 +48,11 @@ class PointList(object):
                     nearest = i
             self.__lista.append(lista_n.pop(nearest))
 
-    def append(self, element: Vector):
+    def add(self, element: Vector):
         self.set.add(element.int_vector())
+
+    def append(self, element: Vector):
+        self.__lista.append(element)
 
     def remove(self, item: Vector):
         self.set.remove(item)
