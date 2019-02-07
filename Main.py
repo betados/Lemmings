@@ -93,8 +93,10 @@ while not done:
         # render text
         label = myfont.render("To save press \"s\"", 1, (0, 100, 255))
         screen.blit(label, (resolution[0] / 50, resolution[1] - size))
-        label = myfont.render("To exit press esc", 1, (0, 100, 255))
+        label = myfont.render("To load press \"L\"", 1, (0, 100, 255))
         screen.blit(label, (resolution[0] / 50, resolution[1] - size * 2))
+        label = myfont.render("To exit press esc", 1, (0, 100, 255))
+        screen.blit(label, (resolution[0] / 50, resolution[1] - size * 3))
 
         # to exit
         if teclas[pygame.K_ESCAPE]:
