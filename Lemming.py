@@ -23,9 +23,11 @@ class LemmingList(object):
 
     def draw(self, t, screen):
         """ Atualize position and draw each lemming"""
-        for lemming in self.lista:
-            lemming.actualize(t)
-            lemming.draw(screen, self.discreteDebugging)
+        # print('time', t)
+        if t < 1000:
+            for lemming in self.lista:
+                lemming.actualize(t)
+                lemming.draw(screen, self.discreteDebugging)
 
     def __getitem__(self, item):
         """ get the lemming """
@@ -41,7 +43,7 @@ class Lemming(object):
     def __init__(self, index, screen):
         self.screen = screen
         self.index = index
-        self.pos = Vector(30, (index - 15) * 100)
+        self.pos = Vector(60, (index - 11) * 100)
         self.alto = 36
         self.ancho = 22
         self.rect = pygame.Rect(self.pos(), (self.ancho, self.alto))
@@ -119,8 +121,6 @@ class Lemming(object):
     def walk(self, t):
         """ case """
         pass
-        # self.vel = self.vel[0] + 0.5 * self.accel[0] * t * t,\
-        #     self.vel[1] + 0.5 * self.accel[1] * t * t
 
     def fall(self, t):
         """ case """
@@ -228,7 +228,7 @@ class Lemming(object):
                     self.floor.rellenoLines.remove(line)
                     continue
                 line[0] += Vector(0, 1)
-                self.floor.pointList.append(line[0])
+                self.floor.pointList.add(line[0])
                 areLines = True
         # self.floor.connect()
 
