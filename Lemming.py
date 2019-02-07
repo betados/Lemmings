@@ -67,6 +67,12 @@ class Lemming(object):
         self.period = 10
         self.timer = 0
 
+        self.bomb_radius = self.ancho * 1.3
+        self.bomb_set = set(
+            Vector(int(x), int(y)) for x in self.float_range(-self.bomb_radius, self.bomb_radius) for y in
+            self.float_range(-self.bomb_radius, self.bomb_radius)
+            if abs(Vector(x, y)) < self.bomb_radius)
+
         self.complements = []
 
         self.characterDict = {"Walk": self.walk, "Stop": self.stop,
@@ -74,6 +80,12 @@ class Lemming(object):
                               "Bomb": self.bomb, "Dig down": self.dig,
                               "Dig horiz.": self.dig, "Dig diag.": self.dig,
                               "Parachute": self.parachute, "Fall": self.fall}
+
+    @staticmethod
+    def float_range(x, y, jump=1):
+        while x < y:
+            yield x
+            x += jump
 
     def actualize(self, t):
         """ Actualize the position and speed of the lemming """
@@ -132,58 +144,18 @@ class Lemming(object):
 
     def bomb(self, t):
         """ case """
-        radio = self.ancho * 1.3
         self.timer += t
         if self.timer >= 1:
             self.vel = Vector()
-            # FIXME si no se repite no se borran bien
-            for _ in range(10):
-                for point in self.floor.pointList:
-                    if abs(point[0] - self.knee[0]) < radio:
-                        self.floor.pointList.remove(point)
-                for line in self.floor.rellenoLines:
-                    if abs(line[0][0] - self.knee[0]) < radio:
-                        y1, y2 = Interaction.getBoomY(radio, self.knee, line[0][0])
-                        y1 = int(y1)
-                        y2 = int(y2)
-                        # 1
-                        if line[1][1] >= y2 >= line[0][1] and line[1][1] >= y1 >= line[0][1]:
-                            newLine2 = [line[0], Vector(line[0][0], y2)]
-                            newLine1 = [Vector(line[0][0], y1), line[1]]
-                            self.floor.rellenoLines.remove(line)
-                            self.floor.rellenoLines.append(newLine2)
-                            self.floor.rellenoLines.append(newLine1)
-                            self.floor.pointList.append(newLine2[1])
-                            self.floor.pointList.append(newLine1[0])
-                            continue
-                        # 2
-                        if y2 < line[0].y and line[1].y >= y1 >= line[0].y:
-                            print(2)
-                            line[0] = [line[0][0], int(y1)]
-                            self.floor.pointList.append(line[0])
-                            continue
-                        # 3
-                        if line[1][1] >= y2 >= line[0][1] and line[1][1] > y1:
-                            print(3)
-                            line[1] = [line[0][0], int(y2)]
-                            self.floor.pointList.append(line[1])
-                            continue
-                        # 4
-                        if y2 < line[0][1] and y1 > line[1][1]:
-                            print(4)
-                            self.floor.rellenoLines.remove(line)
-                            continue
+            # FIXME rehacer la point list despues de esto
+            for point in self.floor.pointList:
+                if abs(point - self.knee) < self.bomb_radius:
+                    self.floor.pointList.remove(point)
 
-                        # if y1 > line[1][1]:
-                        #     # y1 = line[1][1]
-                        #     self.floor.rellenoLines.remove(line)
-                        #     continue
-                        # if y1 < line[0][1]:
-                        #     y1 = line[0][1]
-                        # line[0] = [line[0][0], int(y1)]
-                        # self.floor.pointList.append(line[0])
+            self.floor.relleno_points = self.floor.relleno_points.difference(
+                set(self.knee.int_vector() + point for point in self.bomb_set))
 
-            self.action = "Walk"
+            # self.action = "Walk"
 
     def climb(self, t):
         """ case """
