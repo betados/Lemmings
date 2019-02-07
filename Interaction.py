@@ -31,16 +31,18 @@ class Interaction(object):
     @staticmethod
     def collide_list(pos: Vector, floor):
         """ checks if a point is colliding whith a point list"""
+        V = 0.03
+        COS45 = 0.71
         if pos in floor.relleno:
             if pos - Vector(0, 5) in floor.relleno:
                 if pos - Vector(0, 10) in floor.relleno:
                     return True, Vector(0, 0)
                 else:
-                    return True, Vector(1, -1) * 0.02
+                    return True, Vector(1, -1) * V * COS45
             else:
-                return True, Vector(0.03, 0)
+                return True, Vector(V, 0)
         elif pos + Vector(0, 5) in floor.relleno:
-            return True, Vector(1, 1) * 0.02
+            return True, Vector(1, 1) * V * COS45
         else:
             return False, None
 
