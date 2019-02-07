@@ -135,9 +135,9 @@ while not done:
         screen.blit(label, (resolution[0] / 50, resolution[1] - size))
 
     # PRINT MOUSE
-    myfont = pygame.font.SysFont("Arial", 30)
+    myfont = pygame.font.SysFont("Arial", 20)
     label = myfont.render(str(pygame.mouse.get_pos()), 1, (250, 0, 255))
-    screen.blit(label, (resolution[0] / 2, resolution[1] - 33))
+    screen.blit(label, (resolution[0] / 2, resolution[1] - 25))
 
     t = reloj.get_time()
 

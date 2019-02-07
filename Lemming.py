@@ -68,10 +68,10 @@ class Lemming(object):
         self.timer = 0
 
         self.bomb_radius = self.ancho * 1.3
-        self.bomb_set = set(
+        self.bomb_set = {
             Vector(int(x), int(y)) for x in self.float_range(-self.bomb_radius, self.bomb_radius) for y in
             self.float_range(-self.bomb_radius, self.bomb_radius)
-            if abs(Vector(x, y)) < self.bomb_radius)
+            if abs(Vector(x, y)) < self.bomb_radius}
 
         self.complements = []
 
@@ -153,7 +153,7 @@ class Lemming(object):
                     self.floor.pointList.remove(point)
 
             self.floor.relleno = self.floor.relleno.difference(
-                set(self.knee.int_vector() + point for point in self.bomb_set))
+                {self.knee.int_vector() + point for point in self.bomb_set})
 
             # self.action = "Walk"
 
