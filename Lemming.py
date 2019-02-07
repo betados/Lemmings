@@ -95,7 +95,7 @@ class Lemming(object):
 
         self.pos = self.pos + self.vel * t
         self.rect.bottomright = self.pos()
-        self.knee = self.pos - Vector(self.ancho / 2, self.ancho / 2 + 3)
+        self.knee = self.pos - Vector(self.ancho / 2, self.ancho / 5)
 
     def draw(self, screen, discreteDebugging):
         """Draw the lemming"""

@@ -34,8 +34,6 @@ class PointList(object):
 
     @property
     def lista(self):
-        # self.__lista = list(self.set)
-        # self.sort()
         return self.__lista
 
     def sort(self):
@@ -55,7 +53,7 @@ class PointList(object):
         self.__lista.append(element)
 
     def remove(self, item: Vector):
-        self.set.remove(item)
+        self.lista.remove(item)
 
     def pop(self, index: int = -1):
         raise NotImplementedError

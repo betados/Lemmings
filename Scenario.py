@@ -30,7 +30,7 @@ class Floor(object):
             while (self.pointList.lista[i - 1] + line).int_vector() not in original_set:
                 self.pointList.add(line + self.pointList.lista[i - 1])
                 line += line.unit()
-        self.pointList.order_list()
+        # self.pointList.order_list()
         # print(self.pointList.lista)
         print('connected')
 
@@ -70,12 +70,13 @@ class Floor(object):
         else:
             return False
 
-    def draw(self, screen):
+    def draw(self, screen, status):
         """ draw the floor """
-        for i, point in enumerate(self.pointList.lista):
-            pygame.draw.circle(screen, self.color, point.int(), 1, 1)
-        for i, point in enumerate(self.pointList.set):
-            pygame.draw.circle(screen, self.color, point.int(), 1, 1)
+        if status == 'drawing':
+            for i, point in enumerate(self.pointList.lista):
+                pygame.draw.circle(screen, self.color, point.int(), 1, 1)
+            for i, point in enumerate(self.pointList.set):
+                pygame.draw.circle(screen, self.color, point.int(), 1, 1)
             # text = pygame.font.Font(None, 15).render(str(i), 1, (0, 255, 0))
             # screen.blit(text, point())
         for point in self.relleno:
@@ -127,7 +128,7 @@ class Scenario(object):
 
         yaml.dump(self.floor_list, open("maps/" + name + '.yaml', 'w'))
 
-    def draw(self):
+    def draw(self, status):
         """ draws each floor """
         for floor in self.floor_list:
-            floor.draw(self.screen)
+            floor.draw(self.screen, status)

@@ -2,13 +2,15 @@
 
 import os
 import sys
-import pygame
-import eztext
 
-from Scenario import Scenario
-from Lemming import LemmingList
+import pygame
+
+import eztext
 from Interaction import Interaction
+from Lemming import LemmingList
+from Scenario import Scenario
 from gui import Gui
+import time
 
 if sys.platform == 'win32' or sys.platform == 'win64':
     os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -70,7 +72,7 @@ while not done:
             movement = pygame.mouse.get_rel()
             position = pygame.mouse.get_pos()
             if movement[0] != 0 or movement[1] != 0:
-                scenario.add(position)
+                scenario.append(position)
 
         # --- LA LÓGICA DEL JUEGO DEBERÍA IR AQUÍ
 
@@ -97,20 +99,6 @@ while not done:
         if teclas[pygame.K_ESCAPE]:
             done = True
 
-    elif status == "saving" and events != 0:
-        if teclas[pygame.K_RETURN] or teclas[pygame.K_KP_ENTER]:
-            scenario.save(text.getInput())
-            status = "playing"
-        text.update(events)
-        text.draw(screen)
-
-        # TEXT
-        size = 20
-        myfont = pygame.font.SysFont("calibri", size)
-        # render text
-        label = myfont.render("To save press enter", 1, (0, 100, 255))
-        screen.blit(label, (resolution[0] / 50, resolution[1] - size))
-
     elif status == 'playing':
 
         if pygame.mouse.get_pressed()[0] == 1:
@@ -128,18 +116,38 @@ while not done:
         gui.draw()
         lemmingList.draw(t, screen)
 
+    elif status == "saving" and events != 0:
+        if teclas[pygame.K_RETURN] or teclas[pygame.K_KP_ENTER]:
+            scenario.save(text.getInput())
+            status = "playing"
+
+        text.update(events)
+        text.draw(screen)
+
+        # TEXT
+        size = 20
+        myfont = pygame.font.SysFont("calibri", size)
+        # render text
+        label = myfont.render("To save press enter", 1, (0, 100, 255))
+        screen.blit(label, (resolution[0] / 50, resolution[1] - size))
+
+    # PRINT MOUSE
+    myfont = pygame.font.SysFont("Arial", 30)
+    label = myfont.render(str(pygame.mouse.get_pos()), 1, (250, 0, 255))
+    screen.blit(label, (resolution[0] / 2, resolution[1] - 33))
+
     t = reloj.get_time()
 
     # --- EL CÓDIGO DE DIBUJO DEBERÍA IR AQUÍ
 
     # borra lo anterior
-    scenario.draw()
+    scenario.draw(status)
 
     # --- Avanzamos y actualizamos la pantalla con lo que hemos dibujado.
     pygame.display.flip()
 
     # --- Limitamos a 60 fotogramas por segundo (frames per second)
-    reloj.tick(60)
+    reloj.tick(20)
 
 # Cerramos la ventana y salimos.
 # Si te olvidas de esta última línea, el programa se 'colgará'
