@@ -33,6 +33,7 @@ class Floor(object):
                 self.pointList.add(line + self.pointList.lista[i - 1])
                 line += line.unit()
         self.pointList.order_list()
+        # print(self.pointList.lista)
         print('connected')
 
     def fill(self):
@@ -40,21 +41,12 @@ class Floor(object):
         for x in range(int(self.pointList.leftest.x + 1), int(self.pointList.rightest.x)):
             inside = False
             for y in range(int(self.pointList.highest.y - 1), int(self.pointList.lowest.y)):
-                if Vector(x, y) in self.pointList.set:
+                if Vector(x, y) in self.pointList.set and Vector(x, y-1) not in self.pointList.set:
                     inside = not inside
                 elif inside:
                     vertical_set.add(Vector(x, y))
 
-        horizontal_set = set()
-        for y in range(int(self.pointList.highest.y + 1), int(self.pointList.lowest.y)):
-            inside = False
-            for x in range(int(self.pointList.leftest.x - 1), int(self.pointList.rightest.x)):
-                if Vector(x, y) in self.pointList.set:
-                    inside = not inside
-                elif inside:
-                    horizontal_set.add(Vector(x, y))
-
-        self.relleno_points += list((vertical_set.intersection(horizontal_set)))
+        self.relleno_points += list(vertical_set)
         print('filled')
 
     def point_is_inside_closed_lines(self, point):
