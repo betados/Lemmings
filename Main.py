@@ -85,6 +85,7 @@ while not done:
         # LOAD
         if teclas[pygame.K_l]:
             scenario.load("maps/.yaml")
+            status = "playing"
 
         # TEXT
         size = 20

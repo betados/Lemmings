@@ -2,8 +2,8 @@
     Module in charge of generating the map
 """
 import pygame
-import yaml
 from vector_2d import Vector
+from ruamel.yaml import YAML
 import time
 
 from pointList import PointList
@@ -111,6 +111,10 @@ class Scenario(object):
         self.floor_list = []
 
     def load(self, font):
+        yaml = YAML(typ='safe')
+        yaml.register_class(Floor)
+        yaml.register_class(Vector)
+        yaml.register_class(PointList)
         self.floor_list = yaml.load(open(font))
 
     def newFloor(self):
@@ -120,12 +124,15 @@ class Scenario(object):
         self.floor_list[-1].append(point)
 
     def save(self, name):
-        import yaml
         for floor in self.floor_list:
             floor.connect()
-            # floor.complete_select_strategy()
             floor.fill()
 
+        yaml = YAML()
+        yaml.default_flow_style = False
+        yaml.register_class(Floor)
+        yaml.register_class(Vector)
+        yaml.register_class(PointList)
         yaml.dump(self.floor_list, open("maps/" + name + '.yaml', 'w'))
 
     def draw(self, status):
