@@ -39,6 +39,8 @@ class Interaction(object):
                     return True, Vector(1, -1) * 0.02
             else:
                 return True, Vector(0.03, 0)
+        elif pos + Vector(0, 5) in floor.relleno:
+            return True, Vector(1, 1) * 0.02
         else:
             return False, None
 
