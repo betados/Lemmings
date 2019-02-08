@@ -147,15 +147,13 @@ class Lemming(object):
         self.timer += t
         if self.timer >= 1:
             self.vel = Vector()
-            # FIXME rehacer la point list despues de esto
             for point in self.floor.pointList:
                 if abs(point - self.knee) < self.bomb_radius:
                     self.floor.pointList.remove(point)
 
-            self.floor.relleno = self.floor.relleno.difference(
-                {self.knee.int_vector() + point for point in self.bomb_set})
+            self.floor.relleno -= {self.knee.int_vector() + point for point in self.bomb_set}
 
-            # self.action = "Walk"
+        # TODO hacer que muera el lemming
 
     def climb(self, t):
         """ case """
