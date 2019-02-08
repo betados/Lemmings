@@ -217,26 +217,25 @@ class Step(object):
     width = 10
     height = 3
 
-    def __init__(self, pos, screen):
+    def __init__(self, pos: Vector, screen):
         # down left corner
         self.pos = pos
         self.screen = screen
         self.point_list = []
         pointer = self.pos
-        for _ in range(Step.width):
-            pointer += Vector(1, 0)
-            self.point_list.append(pointer)
-        for _ in range(Step.height):
-            pointer += Vector(0, -1)
-            self.point_list.append(pointer)
-        for _ in range(Step.width):
-            pointer += Vector(-1, 0)
-            self.point_list.append(pointer)
-        for _ in range(Step.height):
-            pointer += Vector(0, 1)
-            self.point_list.append(pointer)
+
+        pointer += Vector(Step.width, 0)
+        self.point_list.append(pointer)
+
+        pointer += Vector(0, -Step.height)
+        self.point_list.append(pointer)
+
+        pointer += Vector(-Step.width, 0)
+        self.point_list.append(pointer)
+
+        pointer += Vector(0, Step.height)
+        self.point_list.append(pointer)
 
     def draw(self):
         """ Draws it"""
-        pygame.draw.lines(self.screen, (150, 150, 150), False, [point.int() for point in self.point_list], 1)
-        print(self.point_list)
+        pygame.draw.lines(self.screen, (150, 150, 150), True, [point.int() for point in self.point_list], 1)
