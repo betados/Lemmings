@@ -79,11 +79,6 @@ class Floor(object):
                     if Vector(x, y) in self.relleno:
                         pygame.draw.circle(screen, (100, 100, 10), (x, y), 3, 3)
 
-        # pygame.draw.circle(screen, (255, 0, 0), self.point_list.rightest.int(), 3, 3)
-        # pygame.draw.circle(screen, (255, 0, 0), self.point_list.leftest.int(), 3, 3)
-        # pygame.draw.circle(screen, (255, 0, 0), self.point_list.highest.int(), 3, 3)
-        # pygame.draw.circle(screen, (255, 0, 0), self.point_list.lowest.int(), 3, 3)
-
     def add(self, point):
         self.point_list.add(Vector(*point))
 

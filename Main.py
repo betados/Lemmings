@@ -132,6 +132,6 @@ while not done:
     scenario.draw(status)
     pygame.display.flip()
 
-    reloj.tick(20)
+    reloj.tick(60)
 
 pygame.quit()

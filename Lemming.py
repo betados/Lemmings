@@ -7,6 +7,7 @@ import random
 
 import pygame
 from vector_2d import Vector
+from typing import List, Tuple, Optional
 
 
 class LemmingList(object):
@@ -34,7 +35,7 @@ class LemmingList(object):
 class Lemming(object):
     """ This class is the implementation of the lemmings sprites"""
 
-    def __init__(self, index, screen):
+    def __init__(self, index: int, screen):
         self.screen = screen
         self.index = index
         self.pos = Vector(60, (index - 11) * 100)
@@ -76,12 +77,12 @@ class Lemming(object):
                               "Parachute": self.parachute, "Fall": self.fall}
 
     @staticmethod
-    def float_range(x, y, jump=1):
+    def float_range(x: float, y: float, jump: float = 1):
         while x < y:
             yield x
             x += jump
 
-    def actualize(self, t):
+    def actualize(self, t: int):
         """ Actualize the position and speed of the lemming """
 
         if self.action:
@@ -91,7 +92,7 @@ class Lemming(object):
         self.rect.bottomright = self.pos()
         self.knee = self.pos - Vector(self.width / 2, self.width / 5)
 
-    def draw(self, screen, discrete_debugging=False):
+    def draw(self, screen, discrete_debugging: bool = False):
         """Draw the lemming"""
         if discrete_debugging:
             pygame.draw.rect(screen, (0, 50, 0), self.rect, 1)
@@ -105,7 +106,7 @@ class Lemming(object):
         for complement in self.complements:
             complement.draw()
 
-    def get_next_image(self):
+    def get_next_image(self) -> Tuple[int, int, int, int]:
         """Return the corresponding image for the sprite"""
         side = 46
         if self.action == "Fall":
@@ -119,7 +120,7 @@ class Lemming(object):
                 self.walkingImagePointer = 0
             return 50 * self.walkingImagePointer + 8, side * 2, side, side - 10
 
-    def is_walking(self):
+    def is_walking(self)-> bool:
         """Is the lemming walking?"""
         return self.action == "Walk"
 
@@ -235,10 +236,7 @@ class Step(object):
             pointer += Vector(0, 1)
             self.point_list.append(pointer)
 
-    def get_points(self):
-        for point in self.point_list:
-            yield point()
-
     def draw(self):
         """ Draws it"""
-        pygame.draw.lines(self.screen, (150, 150, 150), False, list(self.get_points()), 1)
+        pygame.draw.lines(self.screen, (150, 150, 150), False, [point.int() for point in self.point_list], 1)
+        print(self.point_list)

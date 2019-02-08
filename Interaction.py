@@ -2,6 +2,9 @@
 
 """ Check the interaction between the elements in the game """
 from vector_2d import Vector
+from Scenario import Floor
+from typing import List, Tuple, Optional
+from Lemming import LemmingList
 
 V = 0.03
 COS45 = 0.71
@@ -11,13 +14,12 @@ class Interaction(object):
     """ static class in charge of checking interaction between different elements"""
 
     @staticmethod
-    def camina_rect(lemmingList, floor_list):
+    def camina_rect(lemming_list: LemmingList, floor_list: List[Floor]):
         """ look each lemming checking if it is touching a floor"""
-        for lemming in lemmingList:
+        for lemming in lemming_list:
             if lemming.action in ("Walk", "Bomb", "Fall"):
                 for floor in floor_list:
                     collision, vel = Interaction.collide_list(lemming.knee.int_vector(), floor)
-                    # TODO tener en cuenta la inclinacion para caer o no poder avanzar
                     if collision:
                         lemming.vel = vel
                         if lemming.action == "Fall":
@@ -30,9 +32,8 @@ class Interaction(object):
                 pass
 
     @staticmethod
-    def collide_list(pos: Vector, floor):
+    def collide_list(pos: Vector, floor: Floor) -> Tuple[bool, Optional[Vector]]:
         """ checks if a point is colliding whith a point list"""
-
         if pos in floor.relleno:
             if pos - Vector(0, 5) in floor.relleno:
                 if pos - Vector(0, 10) in floor.relleno:
@@ -47,23 +48,21 @@ class Interaction(object):
             return False, None
 
     @staticmethod
-    def is_button_pressed(pos, button_list):
+    def is_button_pressed(pos: Vector, button_list) -> str:
         """ check if and witch button of the gui is clicked """
         for button in button_list:
             if button.coordinates[1][0] > pos[0] > button.coordinates[0][0] and \
                     button.coordinates[0][1] < pos[1] < button.coordinates[3][1]:
                 print(button.text)
                 return button.text
-        return None
 
     @staticmethod
-    def is_lemming_pressed(pos, lemming_list, state_dict):
+    def is_lemming_pressed(pos: Tuple[int, int], lemming_list: LemmingList, state_dict: dict) -> int:
         """ check if and witch lemming is clicked  """
         for lemming in lemming_list:
             if lemming.rect.collidepoint(pos):
                 print(lemming.index)
                 lemming.action = state_dict["action"]
                 return lemming.index
-        return None
 
     # TODO comprabación lemming-lemming y sus complementos
