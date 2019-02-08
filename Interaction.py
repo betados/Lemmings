@@ -28,6 +28,9 @@ class Interaction(object):
                         break
                     else:
                         lemming.action = "Fall"
+                for complement in lemming.complements:
+                    collision, vel = Interaction.collide_list(lemming.knee.int_vector(), complement)
+                    print(collision)
             if lemming.action == "Dig down":
                 pass
 
