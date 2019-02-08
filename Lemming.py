@@ -141,9 +141,9 @@ class Lemming(object):
         self.timer += t
         if self.timer >= 1:
             self.vel = Vector()
-            for point in self.floor.pointList:
+            for point in self.floor.point_list:
                 if abs(point - self.knee) < self.bomb_radius:
-                    self.floor.pointList.remove(point)
+                    self.floor.point_list.remove(point)
 
             self.floor.relleno -= {self.knee.int_vector() + point for point in self.bomb_set}
 
@@ -177,12 +177,12 @@ class Lemming(object):
         self.vel = Vector(0, 0.01)
 
         remove_list = []
-        for i, point in enumerate(self.floor.pointList):
+        for i, point in enumerate(self.floor.point_list):
             if abs(self.knee - point) < self.width / 2:
                 remove_list.append(i)
         remove_list.sort(reverse=True)
         for index in remove_list:
-            self.floor.pointList.pop(index)
+            self.floor.point_list.pop(index)
 
         are_lines = False
         for line in self.floor.rellenoLines:
@@ -192,7 +192,7 @@ class Lemming(object):
                     self.floor.rellenoLines.remove(line)
                     continue
                 line[0] += Vector(0, 1)
-                self.floor.pointList.add(line[0])
+                self.floor.point_list.add(line[0])
                 are_lines = True
         # self.floor.connect()
 
@@ -220,23 +220,23 @@ class Step(object):
         # down left corner
         self.pos = pos
         self.screen = screen
-        self.pointList = []
+        self.point_list = []
         pointer = self.pos
         for _ in range(Step.width):
             pointer += Vector(1, 0)
-            self.pointList.append(pointer)
+            self.point_list.append(pointer)
         for _ in range(Step.height):
             pointer += Vector(0, -1)
-            self.pointList.append(pointer)
+            self.point_list.append(pointer)
         for _ in range(Step.width):
             pointer += Vector(-1, 0)
-            self.pointList.append(pointer)
+            self.point_list.append(pointer)
         for _ in range(Step.height):
             pointer += Vector(0, 1)
-            self.pointList.append(pointer)
+            self.point_list.append(pointer)
 
     def get_points(self):
-        for point in self.pointList:
+        for point in self.point_list:
             yield point()
 
     def draw(self):
