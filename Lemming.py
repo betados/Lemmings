@@ -142,11 +142,11 @@ class Lemming(object):
         self.timer += t
         if self.timer >= 1:
             self.vel = Vector()
-            for point in self.floor.point_list:
+            for point in self.floor.point_list.lista:
                 if abs(point - self.knee) < self.bomb_radius:
                     self.floor.point_list.remove(point)
 
-            self.floor.relleno -= {self.knee.int_vector() + point for point in self.bomb_set}
+            self.floor.point_list.relleno -= {self.knee.int_vector() + point for point in self.bomb_set}
 
         # TODO hacer que muera el lemming
 

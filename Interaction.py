@@ -34,15 +34,15 @@ class Interaction(object):
     @staticmethod
     def collide_list(pos: Vector, floor: Floor) -> Tuple[bool, Optional[Vector]]:
         """ checks if a point is colliding whith a point list"""
-        if pos in floor.relleno:
-            if pos - Vector(0, 5) in floor.relleno:
-                if pos - Vector(0, 10) in floor.relleno:
+        if pos in floor.point_list.relleno:
+            if pos - Vector(0, 5) in floor.point_list.relleno:
+                if pos - Vector(0, 10) in floor.point_list.relleno:
                     return True, Vector(0, 0)
                 else:
                     return True, Vector(1, -1) * V * COS45
             else:
                 return True, Vector(V, 0)
-        elif pos + Vector(0, 5) in floor.relleno:
+        elif pos + Vector(0, 5) in floor.point_list.relleno:
             return True, Vector(1, 1) * V * COS45
         else:
             return False, None

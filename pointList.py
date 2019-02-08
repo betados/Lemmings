@@ -5,6 +5,7 @@ class PointList(object):
     def __init__(self):
         self.set = set()
         self.__lista = []
+        self.relleno = set()
         self.__x_boundaries = None
         self.__y_boundaries = None
 
@@ -35,7 +36,10 @@ class PointList(object):
         return self.__lista[item]
 
     def __iter__(self):
-        return iter(self.__lista)
+        for x in range(int(self.leftest + 1), int(self.rightest), 5):
+            for y in range(int(self.highest - 1), int(self.lowest), 5):
+                if Vector(x, y) in self.relleno:
+                    yield Vector(x, y)
 
     def order_list(self):
         self.__lista = list(self.set)

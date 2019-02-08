@@ -13,7 +13,6 @@ class Floor(object):
 
     def __init__(self, size):
         self.size = size
-        self.relleno = set()
         self.color = 0, 0, 255
         self.point_list = PointList()
 
@@ -39,7 +38,7 @@ class Floor(object):
                 elif inside:
                     vertical_set.add(Vector(x, y))
 
-        self.relleno = vertical_set
+        self.point_list.relleno = vertical_set
         print('filled')
 
     def point_is_inside_closed_lines(self, point):
@@ -73,11 +72,9 @@ class Floor(object):
             for i, point in enumerate(self.point_list.set):
                 pygame.draw.circle(screen, self.color, point.int(), 1, 1)
 
-        if self.relleno:
-            for x in range(int(self.point_list.leftest + 1), int(self.point_list.rightest), 5):
-                for y in range(int(self.point_list.highest - 1), int(self.point_list.lowest), 5):
-                    if Vector(x, y) in self.relleno:
-                        pygame.draw.circle(screen, (100, 100, 10), (x, y), 3, 3)
+        if self.point_list.relleno:
+            for point in self.point_list:
+                pygame.draw.circle(screen, (100, 100, 10), point.int(), 3, 3)
 
     def add(self, point):
         self.point_list.add(Vector(*point))
