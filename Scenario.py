@@ -72,16 +72,17 @@ class Floor(object):
                 pygame.draw.circle(screen, self.color, point.int(), 1, 1)
             for i, point in enumerate(self.point_list.set):
                 pygame.draw.circle(screen, self.color, point.int(), 1, 1)
-            # text = pygame.font.Font(None, 15).render(str(i), 1, (0, 255, 0))
-            # screen.blit(text, point())
-        for point in self.relleno:
-            pygame.draw.circle(screen, (100, 100, 10), point.int(), 1, 1)
-            # pygame.draw.lines(screen, (100, 100, 10), False, (line[0](), line[1]()), 1)
 
-        # pygame.draw.circle(screen, (255, 0, 0), self.pointList.rightest.int(), 3, 3)
-        # pygame.draw.circle(screen, (255, 0, 0), self.pointList.leftest.int(), 3, 3)
-        # pygame.draw.circle(screen, (255, 0, 0), self.pointList.highest.int(), 3, 3)
-        # pygame.draw.circle(screen, (255, 0, 0), self.pointList.lowest.int(), 3, 3)
+        if self.relleno:
+            for x in range(int(self.point_list.leftest + 1), int(self.point_list.rightest), 5):
+                for y in range(int(self.point_list.highest - 1), int(self.point_list.lowest), 5):
+                    if Vector(x, y) in self.relleno:
+                        pygame.draw.circle(screen, (100, 100, 10), (x, y), 3, 3)
+
+        # pygame.draw.circle(screen, (255, 0, 0), self.point_list.rightest.int(), 3, 3)
+        # pygame.draw.circle(screen, (255, 0, 0), self.point_list.leftest.int(), 3, 3)
+        # pygame.draw.circle(screen, (255, 0, 0), self.point_list.highest.int(), 3, 3)
+        # pygame.draw.circle(screen, (255, 0, 0), self.point_list.lowest.int(), 3, 3)
 
     def add(self, point):
         self.point_list.add(Vector(*point))
