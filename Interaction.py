@@ -3,14 +3,15 @@
 """ Check the interaction between the elements in the game """
 from vector_2d import Vector
 
-import math
+V = 0.03
+COS45 = 0.71
 
 
 class Interaction(object):
     """ static class in charge of checking interaction between different elements"""
 
     @staticmethod
-    def caminaRect(lemmingList, floor_list):
+    def camina_rect(lemmingList, floor_list):
         """ look each lemming checking if it is touching a floor"""
         for lemming in lemmingList:
             if lemming.action in ("Walk", "Bomb", "Fall"):
@@ -31,8 +32,7 @@ class Interaction(object):
     @staticmethod
     def collide_list(pos: Vector, floor):
         """ checks if a point is colliding whith a point list"""
-        V = 0.03
-        COS45 = 0.71
+
         if pos in floor.relleno:
             if pos - Vector(0, 5) in floor.relleno:
                 if pos - Vector(0, 10) in floor.relleno:
@@ -47,9 +47,9 @@ class Interaction(object):
             return False, None
 
     @staticmethod
-    def isButtonPressed(pos, buttonList):
+    def is_button_pressed(pos, button_list):
         """ check if and witch button of the gui is clicked """
-        for button in buttonList:
+        for button in button_list:
             if button.coordinates[1][0] > pos[0] > button.coordinates[0][0] and \
                     button.coordinates[0][1] < pos[1] < button.coordinates[3][1]:
                 print(button.text)
@@ -57,35 +57,13 @@ class Interaction(object):
         return None
 
     @staticmethod
-    def isLemmingPressed(pos, lemmingList, stateDict):
+    def is_lemming_pressed(pos, lemming_list, state_dict):
         """ check if and witch lemming is clicked  """
-        for lemming in lemmingList:
+        for lemming in lemming_list:
             if lemming.rect.collidepoint(pos):
                 print(lemming.index)
-                lemming.action = stateDict["action"]
+                lemming.action = state_dict["action"]
                 return lemming.index
         return None
-
-    @staticmethod
-    def getUnitVector(point1, point2):
-        """returns the unit vector between two bidimensional points"""
-        catH = point2[0] - point1[0]
-        catV = point2[1] - point1[1]
-        modulo = math.sqrt(math.pow(catH, 2) + math.pow(catV, 2))
-        if modulo == 0:
-            return 9999, 9999
-        return catH / modulo, catV / modulo
-
-    @staticmethod
-    def add(point1, point2):
-        """returns the sum of two bidimensional points"""
-        return point2[0] + point1[0], point2[1] + point1[1]
-
-    @staticmethod
-    def getBoomY(radio, point, x):
-        """ returns the Y coordinate for the line in case of explosion """
-        # FIXME quizá sea mejor pasar toda la linea en lugar de la x y que se la recorte aquí dentro sin devolver nada
-        part = math.sqrt(radio * radio - math.pow(abs(point[0] - x), 2))
-        return point[1] + part, point[1] - part
 
     # TODO comprabación lemming-lemming y sus complementos

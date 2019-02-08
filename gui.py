@@ -29,7 +29,7 @@ class Gui(object):
 
     # def images(self):
     #     self.image = pygame.image.load("images/lemmings.png").convert()
-    #     for i,rect in enumerate(self.characterList):
+    #     for i,rect in enumerate(self.character_list):
     #         self.screen.blit(self.image, ((i+1)*self.height,self.res[1]-self.height/2), rect)
 
 

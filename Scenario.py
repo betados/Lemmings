@@ -2,9 +2,8 @@
     Module in charge of generating the map
 """
 import pygame
-from vector_2d import Vector
 from ruamel.yaml import YAML
-import time
+from vector_2d import Vector
 
 from pointList import PointList
 
@@ -12,13 +11,10 @@ from pointList import PointList
 class Floor(object):
     """ A floor object is each of the separated point lists"""
 
-    def __init__(self, size, discreteDebugging=False):
+    def __init__(self, size):
         self.size = size
         self.relleno = set()
-        if discreteDebugging:
-            self.color = 0, 0, 150
-        else:
-            self.color = 0, 0, 255
+        self.color = 0, 0, 255
         self.pointList = PointList()
 
     def connect(self):
@@ -30,8 +26,6 @@ class Floor(object):
             while (self.pointList.lista[i - 1] + line).int_vector() not in original_set:
                 self.pointList.add(line + self.pointList.lista[i - 1])
                 line += line.unit()
-        # self.pointList.order_list()
-        # print(self.pointList.lista)
         print('connected')
 
     def fill(self):
@@ -104,7 +98,7 @@ class Sprite(pygame.sprite.Sprite):
 class Scenario(object):
     """ It contains and handles the list of floors"""
 
-    def __init__(self, screen, size, discreteDebugging=False):
+    def __init__(self, screen, size):
         self.size = size
 
         self.screen = screen
@@ -117,7 +111,7 @@ class Scenario(object):
         yaml.register_class(PointList)
         self.floor_list = yaml.load(open(font))
 
-    def newFloor(self):
+    def new_floor(self):
         self.floor_list.append(Floor(self.size))
 
     def append(self, point):

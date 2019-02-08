@@ -8,18 +8,12 @@ import random
 import pygame
 from vector_2d import Vector
 
-from Interaction import Interaction
-
 
 class LemmingList(object):
     """ This class contains and handles the list of lemmings"""
 
-    def __init__(self, quantity, screen, discreteDebugging=False):
-        self.lista = []
-        self.discreteDebugging = discreteDebugging
-
-        for i in range(quantity):
-            self.lista.append(Lemming(i, screen))
+    def __init__(self, quantity, screen):
+        self.lista = [Lemming(i, screen) for i in range(quantity)]
 
     def draw(self, t, screen):
         """ Atualize position and draw each lemming"""
@@ -27,7 +21,7 @@ class LemmingList(object):
         if t < 1000:
             for lemming in self.lista:
                 lemming.actualize(t)
-                lemming.draw(screen, self.discreteDebugging)
+                lemming.draw(screen)
 
     def __getitem__(self, item):
         """ get the lemming """
@@ -44,9 +38,9 @@ class Lemming(object):
         self.screen = screen
         self.index = index
         self.pos = Vector(60, (index - 11) * 100)
-        self.alto = 36
-        self.ancho = 22
-        self.rect = pygame.Rect(self.pos(), (self.ancho, self.alto))
+        self.height = 36
+        self.width = 22
+        self.rect = pygame.Rect(self.pos(), (self.width, self.height))
         self.rect.bottomright = self.pos()
         self.knee = Vector()
         self.action = "Walk"
@@ -62,12 +56,12 @@ class Lemming(object):
         self.walkingImagePointer = random.randrange(7)
         self.totalFallingImages = 3
         self.fallingImagePointer = random.randrange(1, 3)
-        self.image = self.getNextImage()
+        self.image = self.get_next_image()
         self.times = 0
         self.period = 10
         self.timer = 0
 
-        self.bomb_radius = self.ancho * 1.3
+        self.bomb_radius = self.width * 1.3
         self.bomb_set = {
             Vector(int(x), int(y)) for x in self.float_range(-self.bomb_radius, self.bomb_radius) for y in
             self.float_range(-self.bomb_radius, self.bomb_radius)
@@ -93,25 +87,25 @@ class Lemming(object):
         if self.action:
             self.characterDict[self.action](t)
 
-        self.pos = self.pos + self.vel * t
+        self.pos += self.vel * t
         self.rect.bottomright = self.pos()
-        self.knee = self.pos - Vector(self.ancho / 2, self.ancho / 5)
+        self.knee = self.pos - Vector(self.width / 2, self.width / 5)
 
-    def draw(self, screen, discreteDebugging):
+    def draw(self, screen, discrete_debugging=False):
         """Draw the lemming"""
-        if discreteDebugging:
+        if discrete_debugging:
             pygame.draw.rect(screen, (0, 50, 0), self.rect, 1)
         else:
             self.times += 1
             if self.times > self.period:
-                self.image = self.getNextImage()
+                self.image = self.get_next_image()
                 self.times = 0
             screen.blit(self.sprite.image, self.rect, self.image)
 
         for complement in self.complements:
             complement.draw()
 
-    def getNextImage(self):
+    def get_next_image(self):
         """Return the corresponding image for the sprite"""
         side = 46
         if self.action == "Fall":
@@ -125,7 +119,7 @@ class Lemming(object):
                 self.walkingImagePointer = 0
             return 50 * self.walkingImagePointer + 8, side * 2, side, side - 10
 
-    def isWalking(self):
+    def is_walking(self):
         """Is the lemming walking?"""
         return self.action == "Walk"
 
@@ -184,25 +178,25 @@ class Lemming(object):
 
         remove_list = []
         for i, point in enumerate(self.floor.pointList):
-            if abs(self.knee - point) < self.ancho / 2:
+            if abs(self.knee - point) < self.width / 2:
                 remove_list.append(i)
         remove_list.sort(reverse=True)
         for index in remove_list:
             self.floor.pointList.pop(index)
 
-        areLines = False
+        are_lines = False
         for line in self.floor.rellenoLines:
-            if abs(self.knee - line[0]) < self.ancho / 2:
+            if abs(self.knee - line[0]) < self.width / 2:
                 # si la linea se acaba se quita de la lista
                 if line[0].y >= line[1].y:
                     self.floor.rellenoLines.remove(line)
                     continue
                 line[0] += Vector(0, 1)
                 self.floor.pointList.add(line[0])
-                areLines = True
+                are_lines = True
         # self.floor.connect()
 
-        if not areLines:
+        if not are_lines:
             self.action = "Walk"
 
     def parachute(self, t):

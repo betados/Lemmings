@@ -1,4 +1,4 @@
-from vector_2d import Vector, distance_point_segment, VectorPolar
+from vector_2d import Vector
 
 
 class PointList(object):
