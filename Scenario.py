@@ -15,25 +15,26 @@ class Floor(object):
         self.size = size
         self.relleno = set()
         self.color = 0, 0, 255
-        self.pointList = PointList()
+        self.point_list = PointList()
 
     def connect(self):
         """ Rellena si faltan puntos entremedias """
-        self.pointList.set = set(self.pointList.lista)
-        original_set = set(self.pointList.lista)
-        for i, p in enumerate(self.pointList.lista):
-            line = (p - self.pointList.lista[i - 1]).unit()
-            while (self.pointList.lista[i - 1] + line).int_vector() not in original_set:
-                self.pointList.add(line + self.pointList.lista[i - 1])
+        self.point_list.set = set(self.point_list.lista)
+        original_set = set(self.point_list.lista)
+        for i, p in enumerate(self.point_list.lista):
+            line = (p - self.point_list.lista[i - 1]).unit()
+            while (self.point_list.lista[i - 1] + line).int_vector() not in original_set:
+                self.point_list.add(line + self.point_list.lista[i - 1])
                 line += line.unit()
         print('connected')
 
     def fill(self):
+        self.point_list.calc_bounding_box()
         vertical_set = set()
-        for x in range(int(self.pointList.leftest.x + 1), int(self.pointList.rightest.x)):
+        for x in range(int(self.point_list.leftest + 1), int(self.point_list.rightest)):
             inside = False
-            for y in range(int(self.pointList.highest.y - 1), int(self.pointList.lowest.y)):
-                if Vector(x, y) in self.pointList.set and Vector(x, y - 1) not in self.pointList.set:
+            for y in range(int(self.point_list.highest - 1), int(self.point_list.lowest)):
+                if Vector(x, y) in self.point_list.set and Vector(x, y - 1) not in self.point_list.set:
                     inside = not inside
                 elif inside:
                     vertical_set.add(Vector(x, y))
@@ -53,7 +54,7 @@ class Floor(object):
         times = 0
         for i in range(*rango):
             p = point + Vector(0, i)
-            for point in self.pointList:
+            for point in self.point_list:
                 if abs(p - point) < 1:
                     times += 1
         # print times
@@ -67,9 +68,9 @@ class Floor(object):
     def draw(self, screen, status):
         """ draw the floor """
         if status == 'drawing':
-            for i, point in enumerate(self.pointList.lista):
+            for i, point in enumerate(self.point_list.lista):
                 pygame.draw.circle(screen, self.color, point.int(), 1, 1)
-            for i, point in enumerate(self.pointList.set):
+            for i, point in enumerate(self.point_list.set):
                 pygame.draw.circle(screen, self.color, point.int(), 1, 1)
             # text = pygame.font.Font(None, 15).render(str(i), 1, (0, 255, 0))
             # screen.blit(text, point())
@@ -83,10 +84,10 @@ class Floor(object):
         # pygame.draw.circle(screen, (255, 0, 0), self.pointList.lowest.int(), 3, 3)
 
     def add(self, point):
-        self.pointList.add(Vector(*point))
+        self.point_list.add(Vector(*point))
 
     def append(self, point):
-        self.pointList.append(Vector(*point))
+        self.point_list.append(Vector(*point))
 
 
 class Sprite(pygame.sprite.Sprite):

@@ -5,22 +5,30 @@ class PointList(object):
     def __init__(self):
         self.set = set()
         self.__lista = []
+        self.__x_boundaries = None
+        self.__y_boundaries = None
+
+    def calc_bounding_box(self):
+        ordered_x = sorted(self.set, key=lambda point: point.x)
+        ordered_y = sorted(self.set, key=lambda point: point.y)
+        self.__x_boundaries = ordered_x[0][0], ordered_x[-1][0]
+        self.__y_boundaries = ordered_y[0][1], ordered_y[-1][1]
 
     @property
-    def leftest(self) -> Vector:
-        return sorted(self.set, key=lambda point: point.x)[0]
+    def leftest(self) -> float:
+        return self.__x_boundaries[0]
 
     @property
-    def rightest(self) -> Vector:
-        return sorted(self.set, key=lambda point: point.x)[-1]
+    def rightest(self) -> float:
+        return self.__x_boundaries[1]
 
     @property
-    def highest(self) -> Vector:
-        return sorted(self.set, key=lambda point: point.y)[0]
+    def highest(self) -> float:
+        return self.__y_boundaries[0]
 
     @property
-    def lowest(self) -> Vector:
-        return sorted(self.set, key=lambda point: point.y)[-1]
+    def lowest(self) -> float:
+        return self.__y_boundaries[1]
 
     def __getitem__(self, item: int) -> Vector:
         return self.__lista[item]
