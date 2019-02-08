@@ -11,8 +11,9 @@ class PointList(object):
     def calc_bounding_box(self):
         ordered_x = sorted(self.set, key=lambda point: point.x)
         ordered_y = sorted(self.set, key=lambda point: point.y)
-        self.__x_boundaries = ordered_x[0][0], ordered_x[-1][0]
-        self.__y_boundaries = ordered_y[0][1], ordered_y[-1][1]
+        self.__x_boundaries = ordered_x[0].x, ordered_x[-1].x
+        self.__y_boundaries = ordered_y[0].y, ordered_y[-1].y
+        print(self.highest)
 
     @property
     def leftest(self) -> float:
