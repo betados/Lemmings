@@ -8,15 +8,13 @@ import random
 import pygame
 from vector_2d import Vector
 from typing import List, Tuple, Optional
-from Scenario import Floor
 
 
 class LemmingList(object):
     """ This class contains and handles the list of lemmings"""
 
     def __init__(self, quantity, screen):
-        self.complements = []
-        self.lista = [Lemming(i, screen, self.complements) for i in range(quantity)]
+        self.lista = [Lemming(i, screen) for i in range(quantity)]
 
     def draw(self, t, screen):
         """ Atualize position and draw each lemming"""
@@ -25,9 +23,6 @@ class LemmingList(object):
             for lemming in self.lista:
                 lemming.actualize(t)
                 lemming.draw(screen)
-
-            for complement in self.complements:
-                complement.draw(screen)
 
     def __getitem__(self, item):
         """ get the lemming """
@@ -39,11 +34,11 @@ class LemmingList(object):
 
 class Lemming(object):
     """ This class is the implementation of the lemmings sprites"""
-    def __init__(self, index: int, screen, complements: List):
-        self.complements = complements
+
+    def __init__(self, index: int, screen):
         self.screen = screen
         self.index = index
-        self.pos = Vector(60, (index - 10) * 100)
+        self.pos = Vector(60, (index - 11) * 100)
         self.height = 36
         self.width = 22
         self.rect = pygame.Rect(self.pos(), (self.width, self.height))
@@ -73,6 +68,8 @@ class Lemming(object):
             self.float_range(-self.bomb_radius, self.bomb_radius)
             if abs(Vector(x, y)) < self.bomb_radius}
 
+        self.complements = []
+
         self.characterDict = {"Walk": self.walk, "Stop": self.stop,
                               "Climb": self.climb, "Stairway": self.stairway,
                               "Bomb": self.bomb, "Dig down": self.dig,
@@ -95,7 +92,7 @@ class Lemming(object):
         self.rect.bottomright = self.pos()
         self.knee = self.pos - Vector(self.width / 2, self.width / 5)
 
-    def draw(self, screen, discrete_debugging: bool = True):
+    def draw(self, screen, discrete_debugging: bool = False):
         """Draw the lemming"""
         if discrete_debugging:
             pygame.draw.rect(screen, (0, 50, 0), self.rect, 1)
@@ -105,6 +102,9 @@ class Lemming(object):
                 self.image = self.get_next_image()
                 self.times = 0
             screen.blit(self.sprite.image, self.rect, self.image)
+
+        for complement in self.complements:
+            complement.draw()
 
     def get_next_image(self) -> Tuple[int, int, int, int]:
         """Return the corresponding image for the sprite"""
@@ -120,7 +120,7 @@ class Lemming(object):
                 self.walkingImagePointer = 0
             return 50 * self.walkingImagePointer + 8, side * 2, side, side - 10
 
-    def is_walking(self) -> bool:
+    def is_walking(self)-> bool:
         """Is the lemming walking?"""
         return self.action == "Walk"
 
@@ -160,12 +160,12 @@ class Lemming(object):
         self.vel = Vector()
         if self.timer >= 500:
             self.timer = 0
-            if self.stairPos is None:
+            if not self.stairPos:
                 self.stairPos = self.pos
             else:
                 self.stairPos += Vector(7, -5)
                 self.pos = self.stairPos
-            self.complements.append(Step(self.stairPos, self.floor))
+            self.complements.append(Step(self.stairPos, self.screen))
             self.stairCount += 1
         if self.stairCount >= 15:
             self.stairCount = 0
@@ -217,14 +217,12 @@ class Step(object):
     width = 10
     height = 3
 
-    def __init__(self, pos: Vector, floor: Floor):
+    def __init__(self, pos: Vector, screen):
         # down left corner
         self.pos = pos
+        self.screen = screen
         self.point_list = []
-        self.relleno = set()
-        pointer = self.pos.int_vector()
-
-        self.point_list.append(pointer)
+        pointer = self.pos
 
         pointer += Vector(Step.width, 0)
         self.point_list.append(pointer)
@@ -235,10 +233,9 @@ class Step(object):
         pointer += Vector(-Step.width, 0)
         self.point_list.append(pointer)
 
-        for x in range(int(self.point_list[0].x), int(self.point_list[1].x)):
-            for y in range(int(self.point_list[2].y), int(self.point_list[1].y)):
-                self.relleno.add(Vector(x, y))
+        pointer += Vector(0, Step.height)
+        self.point_list.append(pointer)
 
-    def draw(self, screen):
+    def draw(self):
         """ Draws it"""
-        pygame.draw.lines(screen, (150, 150, 150), True, [point.int() for point in self.point_list], 1)
+        pygame.draw.lines(self.screen, (150, 150, 150), True, [point.int() for point in self.point_list], 1)
