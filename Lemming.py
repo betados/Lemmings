@@ -76,11 +76,17 @@ class Lemming(object):
 
         self.complements = []
 
-        self.characterDict = {"Walk": self.walk, "Stop": self.stop,
-                              "Climb": self.climb, "Stairway": self.stairway,
-                              "Bomb": self.bomb, "Dig down": self.dig,
-                              "Dig horiz.": self.dig, "Dig diag.": self.dig,
-                              "Parachute": self.parachute, "Fall": self.fall}
+        self.character_dict = {"Walk": self.walk, "Stop": self.stop,
+                               "Climb": self.climb, "Stairway": self.stairway,
+                               "Bomb": self.bomb, "Dig down": self.dig,
+                               "Dig horiz.": self.dig, "Dig diag.": self.dig,
+                               "Parachute": self.parachute, "Fall": self.fall}
+
+        self.vel_dict = {"Walk": Vector(0.03, 0), "Stop": Vector(),
+                         # "Climb": self.climb, "Stairway": self.stairway,
+                         "Bomb": Vector(), "Dig down": Vector(0, 0.01),
+                         "Dig horiz.": Vector(0.01, 0), "Dig diag.": Vector(0.007, 0.007),
+                         "Parachute": Vector(0, 0.05), "Fall": Vector(0, 0.1)}
 
     @staticmethod
     def float_range(x: float, y: float, jump: float = 1):
@@ -92,7 +98,8 @@ class Lemming(object):
         """ Actualize the position and speed of the lemming """
 
         if self.action:
-            self.characterDict[self.action](t)
+            self.character_dict[self.action](t)
+            self.vel = self.vel_dict[self.action]
 
         self.pos += self.vel * t
         self.rect.bottomright = self.pos()
@@ -137,11 +144,12 @@ class Lemming(object):
 
     def fall(self, t):
         """ case """
-        self.vel = Vector(0, 0.1)
+        # self.vel = Vector(0, 0.1)
 
     def stop(self, t):
         """ case """
-        self.vel = Vector()
+        # self.vel = Vector()
+        pass
 
     def bomb(self, t):
         """ case """
@@ -180,7 +188,7 @@ class Lemming(object):
 
     def dig(self, t):
         """ case """
-        self.vel = Vector(0, 0.01)
+        # self.vel = Vector(0, 0.01)
         self.floor.point_list.relleno -= {self.knee.int_vector() + point for point in self.dig_set}
 
     def parachute(self, t):

@@ -24,7 +24,7 @@ class Interaction(object):
                         if lemming.action == "Fall":
                             lemming.action = "Walk"
                         if lemming.action == 'Walk':
-                            lemming.vel = vel
+                            lemming.vel_dict['Walk'] = vel
                         lemming.floor = floor
                         break
                     else:
