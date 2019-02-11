@@ -38,7 +38,7 @@ class Lemming(object):
     def __init__(self, index: int, screen):
         self.screen = screen
         self.index = index
-        self.pos = Vector(60, (index - 11) * 100)
+        self.pos = Vector(60, index * -100)
         self.height = 36
         self.width = 22
         self.rect = pygame.Rect(self.pos(), (self.width, self.height))
@@ -57,6 +57,8 @@ class Lemming(object):
         self.walkingImagePointer = random.randrange(7)
         self.totalFallingImages = 3
         self.fallingImagePointer = random.randrange(1, 3)
+        self.total_dig_images = 3
+        self.dig_image_pointer = random.randrange(1, 3)
         self.image = self.get_next_image()
         self.times = 0
         self.period = 10
@@ -78,7 +80,7 @@ class Lemming(object):
 
         self.character_dict = {"Walk": self.walk, "Stop": self.stop,
                                "Climb": self.climb, "Stairway": self.stairway,
-                               "Bomb": self.bomb, "Dig down": self.dig,
+                               "Bomb": self.bomb, 'Dig down': self.dig,
                                "Dig horiz.": self.dig, "Dig diag.": self.dig,
                                "Parachute": self.parachute, "Fall": self.fall}
 
@@ -121,17 +123,24 @@ class Lemming(object):
 
     def get_next_image(self) -> Tuple[int, int, int, int]:
         """Return the corresponding image for the sprite"""
-        side = 46
+        height = 46
         if self.action == "Fall":
             self.fallingImagePointer += 1
             if self.fallingImagePointer >= self.totalFallingImages:
                 self.fallingImagePointer = 1
-            return 50 * self.fallingImagePointer + 8, side * 5, side, side - 10
+            return 50 * self.fallingImagePointer + 8, height * 5, height, height - 10
+
+        elif self.action == 'Dig down':
+            self.dig_image_pointer += 1
+            if self.dig_image_pointer >= self.total_dig_images:
+                self.dig_image_pointer = 1
+            return 50 * self.dig_image_pointer + 8, height * 3, height, height - 10
+
         else:
             self.walkingImagePointer += 1
             if self.walkingImagePointer >= self.totalWalkingImages:
                 self.walkingImagePointer = 0
-            return 50 * self.walkingImagePointer + 8, side * 2, side, side - 10
+            return 50 * self.walkingImagePointer + 8, height * 2, height, height - 10
 
     def is_walking(self) -> bool:
         """Is the lemming walking?"""
@@ -188,7 +197,6 @@ class Lemming(object):
 
     def dig(self, t):
         """ case """
-        # self.vel = Vector(0, 0.01)
         self.floor.point_list.relleno -= {self.knee.int_vector() + point for point in self.dig_set}
 
     def parachute(self, t):
