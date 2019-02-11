@@ -63,10 +63,16 @@ class Lemming(object):
         self.timer = 0
 
         self.bomb_radius = self.width * 1.3
+        self.dig_radius = self.width / 2
         self.bomb_set = {
             Vector(int(x), int(y)) for x in self.float_range(-self.bomb_radius, self.bomb_radius) for y in
             self.float_range(-self.bomb_radius, self.bomb_radius)
             if abs(Vector(x, y)) < self.bomb_radius}
+
+        self.dig_set = {
+            Vector(int(x), int(y)) for x in self.float_range(-self.dig_radius, self.dig_radius) for y in
+            self.float_range(-self.dig_radius, self.dig_radius)
+            if abs(Vector(x, y)) < self.dig_radius}
 
         self.complements = []
 
@@ -120,7 +126,7 @@ class Lemming(object):
                 self.walkingImagePointer = 0
             return 50 * self.walkingImagePointer + 8, side * 2, side, side - 10
 
-    def is_walking(self)-> bool:
+    def is_walking(self) -> bool:
         """Is the lemming walking?"""
         return self.action == "Walk"
 
@@ -174,31 +180,8 @@ class Lemming(object):
 
     def dig(self, t):
         """ case """
-        # dig down
         self.vel = Vector(0, 0.01)
-
-        remove_list = []
-        for i, point in enumerate(self.floor.point_list):
-            if abs(self.knee - point) < self.width / 2:
-                remove_list.append(i)
-        remove_list.sort(reverse=True)
-        for index in remove_list:
-            self.floor.point_list.pop(index)
-
-        are_lines = False
-        for line in self.floor.rellenoLines:
-            if abs(self.knee - line[0]) < self.width / 2:
-                # si la linea se acaba se quita de la lista
-                if line[0].y >= line[1].y:
-                    self.floor.rellenoLines.remove(line)
-                    continue
-                line[0] += Vector(0, 1)
-                self.floor.point_list.add(line[0])
-                are_lines = True
-        # self.floor.connect()
-
-        if not are_lines:
-            self.action = "Walk"
+        self.floor.point_list.relleno -= {self.knee.int_vector() + point for point in self.dig_set}
 
     def parachute(self, t):
         """ case """
