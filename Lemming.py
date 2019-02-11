@@ -9,6 +9,7 @@ import pygame
 from vector_2d import Vector
 from typing import List, Tuple, Optional
 from Scenario import Floor
+import warnings
 
 
 class LemmingList(object):
@@ -40,8 +41,8 @@ class Lemming(object):
         self.screen = screen
         self.index = index
         self.pos = Vector(60, index * -100)
-        self.height = 36
-        self.width = 22
+        self.height = 32
+        self.width = 20
         self.rect = pygame.Rect(self.pos(), (self.width, self.height))
         self.rect.bottomright = self.pos()
         self.knee = Vector()
@@ -54,11 +55,11 @@ class Lemming(object):
         self.accel = Vector(0, 0)
 
         self.sprite = Sprite()
-        self.totalWalkingImages = 7
+        self.totalWalkingImages = 10
         self.walkingImagePointer = random.randrange(7)
-        self.totalFallingImages = 3
+        self.total_falling_images = 4
         self.fallingImagePointer = random.randrange(1, 3)
-        self.total_dig_images = 3
+        self.total_dig_images = 8
         self.dig_image_pointer = random.randrange(1, 3)
         self.image = self.get_next_image()
         self.times = 0
@@ -114,6 +115,7 @@ class Lemming(object):
         if discrete_debugging:
             pygame.draw.rect(screen, (0, 50, 0), self.rect, 1)
         else:
+            pygame.draw.rect(screen, (0, 50, 0), self.rect, 1)
             self.times += 1
             if self.times > self.period:
                 self.image = self.get_next_image()
@@ -125,24 +127,39 @@ class Lemming(object):
 
     def get_next_image(self) -> Tuple[int, int, int, int]:
         """Return the corresponding image for the sprite"""
-        height = 46
+        width = 50
+        height = 50
+        offset = 9
+        # pointer = None
         if self.action == "Fall":
             self.fallingImagePointer += 1
-            if self.fallingImagePointer >= self.totalFallingImages:
+            if self.fallingImagePointer >= self.total_falling_images:
                 self.fallingImagePointer = 1
-            return 50 * self.fallingImagePointer + 8, height * 5, height, height - 10
+            pointer = self.fallingImagePointer
+            line = 2
 
         elif self.action == 'Dig down':
             self.dig_image_pointer += 1
             if self.dig_image_pointer >= self.total_dig_images:
                 self.dig_image_pointer = 1
-            return 50 * self.dig_image_pointer + 8, height * 3, height, height - 10
+            pointer = self.dig_image_pointer
+            line = 8
+
+        elif self.action == 'Parachute':
+            self.dig_image_pointer += 1
+            if self.dig_image_pointer >= self.total_dig_images:
+                self.dig_image_pointer = 1
+            pointer = self.dig_image_pointer
+            line = 8
 
         else:
             self.walkingImagePointer += 1
             if self.walkingImagePointer >= self.totalWalkingImages:
                 self.walkingImagePointer = 0
-            return 50 * self.walkingImagePointer + 8, height * 2, height, height - 10
+            pointer = self.walkingImagePointer
+            line = 0
+
+        return width * pointer + offset, height * line, width - offset, height
 
     def is_walking(self) -> bool:
         """Is the lemming walking?"""
@@ -159,8 +176,7 @@ class Lemming(object):
 
     def stop(self, t):
         """ case """
-        # self.vel = Vector()
-        pass
+        warnings.warn('Not implemented')
 
     def bomb(self, t):
         """ case """
@@ -177,7 +193,7 @@ class Lemming(object):
 
     def climb(self, t):
         """ case """
-        raise NotImplementedError
+        warnings.warn('Not implemented')
 
     def stairway(self, t):
         """ case """
@@ -203,14 +219,18 @@ class Lemming(object):
 
     def parachute(self, t):
         """ case """
-        pass
+        warnings.warn('Not implemented')
 
 
 class Sprite(pygame.sprite.Sprite):
     # FIXME esta clase sobra, pero si la quito da un error que ahora mismo no se arreglar.
     def __init__(self):
-        self.image = pygame.Surface([5, 5])
-        self.image = pygame.image.load("images/lemmings.png").convert()
+        # self.image = pygame.Surface([5, 5])
+        self.image = pygame.image.load("images/lemmings_classic.png").convert()
+        # self.image = pygame.transform.scale2x(self.image)
+        # factor = 2.5
+        int_mul = lambda x: int(x * 2.5)
+        self.image = pygame.transform.scale(self.image, (int_mul(437), int_mul(710)))
 
 
 class Step(object):
