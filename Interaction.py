@@ -17,10 +17,10 @@ class Interaction(object):
     def camina_rect(lemming_list: LemmingList, floor_list: List[Floor]):
         """ look each lemming checking if it is touching a floor"""
         for lemming in lemming_list:
-            if lemming.action in ('Walk', 'Bomb', 'Fall', 'Dig down'):
+            if lemming.action in ('Walk', 'Bomb', 'Fall', 'Dig down', 'Dig horiz.', 'Dig diag.'):
                 for floor in floor_list:
                     collision, vel = Interaction.collide_list(
-                        lemming.knee.int_vector() if lemming.action != 'Dig down'
+                        lemming.knee.int_vector() if lemming.action[:3] != 'Dig'
                         else lemming.knee.int_vector() + Vector(0, 6), floor)
                     if collision:
                         if lemming.action == 'Fall':
