@@ -60,13 +60,16 @@ class Lemming(object):
         self.walkingImagePointer = random.randrange(7)
 
         self.total_falling_images = 4
-        self.fallingImagePointer = random.randrange(1, 3)
+        self.fallingImagePointer = random.randrange(0, 3)
 
         self.parachute_images = 4, 12
-        self.parachute_pointer = 1
+        self.parachute_pointer = 4
 
         self.total_dig_images = 8
-        self.dig_image_pointer = 1
+        self.dig_image_pointer = 10
+
+        self.total_bomb_images = 14
+        self.bomb_pointer = 0
 
         self.image = self.get_next_image()
         self.times = 0
@@ -148,23 +151,23 @@ class Lemming(object):
             else:
                 self.fallingImagePointer += 1
                 if self.fallingImagePointer >= self.total_falling_images:
-                    self.fallingImagePointer = 1
+                    self.fallingImagePointer = 0
                 pointer = self.fallingImagePointer
                 line = 2
 
         elif self.action == 'Dig down':
             self.dig_image_pointer += 1
             if self.dig_image_pointer >= self.total_dig_images:
-                self.dig_image_pointer = 1
+                self.dig_image_pointer = 0
             pointer = self.dig_image_pointer
             line = 8
 
-        # elif self.action == 'Bomb':
-        #     self.dig_image_pointer += 1
-        #     if self.dig_image_pointer >= self.total_dig_images:
-        #         self.dig_image_pointer = 1
-        #     pointer = self.dig_image_pointer
-        #     line = 8
+        elif self.action == 'Bomb':
+            self.bomb_pointer += 1
+            if self.bomb_pointer >= self.total_bomb_images:
+                self.bomb_pointer = 0
+            pointer = self.bomb_pointer
+            line = 13
 
         else:
             self.walkingImagePointer += 1
@@ -195,7 +198,7 @@ class Lemming(object):
     def bomb(self, t):
         """ case """
         self.timer += t
-        if self.timer >= 1:
+        if self.timer >= 2333:
             self.vel = Vector()
             for point in self.floor.point_list.lista:
                 if abs(point - self.knee) < self.bomb_radius:
