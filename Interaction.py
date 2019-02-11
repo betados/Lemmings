@@ -21,7 +21,7 @@ class Interaction(object):
                 for floor in floor_list:
                     collision, vel = Interaction.collide_list(
                         lemming.knee.int_vector() if lemming.action[:3] != 'Dig'
-                        else lemming.knee.int_vector() + Vector(0, 6), floor)
+                        else lemming.knee.int_vector() + Vector(0, 5), floor)
                     if collision:
                         if lemming.action == 'Fall':
                             lemming.action = 'Walk'
