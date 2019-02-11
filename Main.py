@@ -100,13 +100,13 @@ while not done:
         if pygame.mouse.get_pressed()[0] == 1:
             position = pygame.mouse.get_pos()
             if not stateDict['isActionSelected']:
-                click = Interaction.is_button_pressed(position, gui.buttonList)
-                if click is not None:
+                clicked_action = Interaction.is_button_pressed(position, gui.buttonList)
+                if clicked_action is not None:
                     stateDict['isActionSelected'] = True
-                    stateDict['action'] = click
+                    stateDict['action'] = clicked_action
             else:
-                click = Interaction.is_lemming_pressed(position, lemmingList.lista, stateDict)
-                if click is not None:
+                clicked_lemming = Interaction.is_lemming_pressed(position, lemmingList.lista, stateDict)
+                if clicked_lemming is not None:
                     stateDict['isActionSelected'] = False
         Interaction.camina_rect(lemmingList, scenario.floor_list)
         gui.draw()
