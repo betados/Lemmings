@@ -47,6 +47,7 @@ class Lemming(object):
         self.rect.bottomright = self.pos()
         self.knee = Vector()
         self.action = "Walk"
+        self.parachuted = False
         self.stairCount = 0
         self.stairPos = None
         self.floor = None
@@ -57,10 +58,16 @@ class Lemming(object):
         self.sprite = Sprite()
         self.totalWalkingImages = 10
         self.walkingImagePointer = random.randrange(7)
+
         self.total_falling_images = 4
         self.fallingImagePointer = random.randrange(1, 3)
+
+        self.parachute_images = 4, 12
+        self.parachute_pointer = 1
+
         self.total_dig_images = 8
-        self.dig_image_pointer = random.randrange(1, 3)
+        self.dig_image_pointer = 1
+
         self.image = self.get_next_image()
         self.times = 0
         self.period = 10
@@ -132,11 +139,18 @@ class Lemming(object):
         offset = 9
         # pointer = None
         if self.action == "Fall":
-            self.fallingImagePointer += 1
-            if self.fallingImagePointer >= self.total_falling_images:
-                self.fallingImagePointer = 1
-            pointer = self.fallingImagePointer
-            line = 2
+            if self.parachuted:
+                self.parachute_pointer += 1
+                if self.parachute_pointer >= self.parachute_images[1]:
+                    self.parachute_pointer = self.parachute_images[0] + 3
+                pointer = self.parachute_pointer
+                line = 2
+            else:
+                self.fallingImagePointer += 1
+                if self.fallingImagePointer >= self.total_falling_images:
+                    self.fallingImagePointer = 1
+                pointer = self.fallingImagePointer
+                line = 2
 
         elif self.action == 'Dig down':
             self.dig_image_pointer += 1
@@ -145,12 +159,12 @@ class Lemming(object):
             pointer = self.dig_image_pointer
             line = 8
 
-        elif self.action == 'Parachute':
-            self.dig_image_pointer += 1
-            if self.dig_image_pointer >= self.total_dig_images:
-                self.dig_image_pointer = 1
-            pointer = self.dig_image_pointer
-            line = 8
+        # elif self.action == 'Bomb':
+        #     self.dig_image_pointer += 1
+        #     if self.dig_image_pointer >= self.total_dig_images:
+        #         self.dig_image_pointer = 1
+        #     pointer = self.dig_image_pointer
+        #     line = 8
 
         else:
             self.walkingImagePointer += 1
@@ -168,7 +182,7 @@ class Lemming(object):
     # ACTIONS for switch-case statement
     def walk(self, t):
         """ case """
-        pass
+        self.parachute_pointer = self.parachute_images[0]
 
     def fall(self, t):
         """ case """
@@ -219,7 +233,10 @@ class Lemming(object):
 
     def parachute(self, t):
         """ case """
-        warnings.warn('Not implemented')
+        self.parachuted = True
+        self.vel_dict['Fall'] = self.vel_dict['Parachute']
+        self.action = 'Fall'
+        # warnings.warn('Not implemented')
 
 
 class Sprite(pygame.sprite.Sprite):
