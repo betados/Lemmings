@@ -16,31 +16,6 @@ class Floor(object):
         self.color = 0, 0, 255
         self.point_list = PointList()
 
-    def connect(self):
-        """ Rellena si faltan puntos entremedias """
-        self.point_list.set = set(self.point_list.lista)
-        original_set = set(self.point_list.lista)
-        for i, p in enumerate(self.point_list.lista):
-            line = (p - self.point_list.lista[i - 1]).unit()
-            while (self.point_list.lista[i - 1] + line).int_vector() not in original_set:
-                self.point_list.add(line + self.point_list.lista[i - 1])
-                line += line.unit()
-        print('connected')
-
-    def fill(self):
-        self.point_list.calc_bounding_box()
-        vertical_set = set()
-        for x in range(int(self.point_list.leftest + 1), int(self.point_list.rightest)):
-            inside = False
-            for y in range(int(self.point_list.highest - 1), int(self.point_list.lowest)):
-                if Vector(x, y) in self.point_list.set and Vector(x, y - 1) not in self.point_list.set:
-                    inside = not inside
-                elif inside:
-                    vertical_set.add(Vector(x, y))
-
-        self.point_list.relleno = vertical_set
-        print('filled')
-
     def point_is_inside_closed_lines(self, point):
         """
             This function is slow. Use it carefully
@@ -82,6 +57,10 @@ class Floor(object):
     def append(self, point):
         self.point_list.append(Vector(*point))
 
+    def complete(self):
+        self.point_list.connect()
+        self.point_list.fill()
+
 
 class Sprite(pygame.sprite.Sprite):
     def __init__(self):
@@ -113,8 +92,7 @@ class Scenario(object):
 
     def save(self, name):
         for floor in self.floor_list:
-            floor.connect()
-            floor.fill()
+            floor.complete()
 
         yaml = YAML()
         yaml.default_flow_style = False

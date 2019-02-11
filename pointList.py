@@ -76,3 +76,28 @@ class PointList(object):
 
     def __str__(self):
         return str(self.__lista)
+
+    def connect(self):
+        """ Rellena si faltan puntos entremedias """
+        self.set = set(self.lista)
+        original_set = set(self.lista)
+        for i, p in enumerate(self.lista):
+            line = (p - self.lista[i - 1]).unit()
+            while (self.lista[i - 1] + line).int_vector() not in original_set:
+                self.add(line + self.lista[i - 1])
+                line += line.unit()
+        print('connected')
+
+    def fill(self):
+        self.calc_bounding_box()
+        vertical_set = set()
+        for x in range(int(self.leftest + 1), int(self.rightest)):
+            inside = False
+            for y in range(int(self.highest - 1), int(self.lowest)):
+                if Vector(x, y) in self.set and Vector(x, y - 1) not in self.set:
+                    inside = not inside
+                elif inside:
+                    vertical_set.add(Vector(x, y))
+
+        self.relleno = vertical_set
+        print('filled')
