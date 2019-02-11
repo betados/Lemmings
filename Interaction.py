@@ -32,15 +32,11 @@ class Interaction(object):
                     else:
                         lemming.action = 'Fall'
 
-            # if lemming.action in ('Dig down', ):
-            #     for floor in floor_list:
-            #         collision = Interaction.collide_list(lemming.knee.int_vector(), floor)
-
     @staticmethod
     def collide_list(pos: Vector, floor: Floor) -> Tuple[bool, Optional[Vector]]:
         """ checks if a point is colliding whith a point list"""
         if pos in floor.point_list.relleno:
-            if pos - Vector(0, 5) in floor.point_list.relleno:
+            if pos - Vector(0, 3) in floor.point_list.relleno:
                 if pos - Vector(0, 10) in floor.point_list.relleno:
                     return True, Vector(0, 0)
                 else:

@@ -8,6 +8,7 @@ import random
 import pygame
 from vector_2d import Vector
 from typing import List, Tuple, Optional
+from Scenario import Floor
 
 
 class LemmingList(object):
@@ -101,7 +102,8 @@ class Lemming(object):
 
         if self.action:
             self.character_dict[self.action](t)
-            self.vel = self.vel_dict[self.action]
+            if self.action in self.vel_dict:
+                self.vel = self.vel_dict[self.action]
 
         self.pos += self.vel * t
         self.rect.bottomright = self.pos()
@@ -186,9 +188,9 @@ class Lemming(object):
             if not self.stairPos:
                 self.stairPos = self.pos
             else:
-                self.stairPos += Vector(7, -5)
+                self.stairPos += Vector(7, -4)
                 self.pos = self.stairPos
-            self.complements.append(Step(self.stairPos, self.screen))
+            self.complements.append(Step(self.stairPos, self.screen, self.floor))
             self.stairCount += 1
         if self.stairCount >= 15:
             self.stairCount = 0
@@ -216,12 +218,14 @@ class Step(object):
     width = 10
     height = 3
 
-    def __init__(self, pos: Vector, screen):
+    def __init__(self, pos: Vector, screen, floor: Floor):
         # down left corner
         self.pos = pos
         self.screen = screen
         self.point_list = []
+
         pointer = self.pos
+        self.point_list.append(pointer)
 
         pointer += Vector(Step.width, 0)
         self.point_list.append(pointer)
@@ -232,8 +236,8 @@ class Step(object):
         pointer += Vector(-Step.width, 0)
         self.point_list.append(pointer)
 
-        pointer += Vector(0, Step.height)
-        self.point_list.append(pointer)
+        floor.point_list.relleno |= {Vector(x, y) for x in range(int(self.pos.x), int(self.pos.x) + Step.width + 1)
+                                     for y in range(int(self.pos.y) - Step.height, int(self.pos.y) + 1)}
 
     def draw(self):
         """ Draws it"""
