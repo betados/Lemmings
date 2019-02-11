@@ -33,7 +33,7 @@ reloj = pygame.time.Clock()
 t = reloj.get_time()
 
 status = 'drawing'
-text = eztext.Input(maxlength=45, color=(100, 0, 0), prompt='Scenario name: ')
+# text = eztext.Input(maxlength=45, color=(100, 0, 0), prompt='Scenario name: ')
 
 while not done:
     screen.fill((0, 0, 0))
@@ -58,6 +58,10 @@ while not done:
                 scenario.new_floor()
             if event.type == pygame.MOUSEBUTTONUP:
                 pass
+        if not scenario.floor_list:
+            myfont = pygame.font.SysFont('Impact', 50)
+            label = myfont.render('DRAW SOMETHING', 1, (30, 0, 30))
+            screen.blit(label, (200, 200))
 
         if pygame.mouse.get_pressed()[0] == 1:
             movement = pygame.mouse.get_rel()
