@@ -4,6 +4,7 @@
 import pygame
 from ruamel.yaml import YAML
 from vector_2d import Vector
+from typing import List, Tuple, Optional
 
 from pointList import PointList
 
@@ -11,7 +12,7 @@ from pointList import PointList
 class Floor(object):
     """ A floor object is each of the separated point lists"""
 
-    def __init__(self, size):
+    def __init__(self, size: Tuple[int, int]):
         self.size = size
         self.color = 0, 0, 255
         self.point_list = PointList()
@@ -71,9 +72,8 @@ class Sprite(pygame.sprite.Sprite):
 class Scenario(object):
     """ It contains and handles the list of floors"""
 
-    def __init__(self, screen, size):
+    def __init__(self, screen, size: Tuple[int, int]):
         self.size = size
-
         self.screen = screen
         self.floor_list = []
 

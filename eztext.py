@@ -57,9 +57,8 @@ class Input:
         surface.blit(text, (self.x, self.y))
 
     # ADDED BY ALVARO
-    def getInput(self):
+    def get_input(self):
         return self.value
-
     # ADDED BY ALVARO
 
     def update(self, events):

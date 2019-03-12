@@ -6,9 +6,9 @@ import sys
 import pygame
 
 import eztext
-from Interaction import Interaction
-from Lemming import LemmingList
-from Scenario import Scenario
+from interaction import Interaction
+from lemming import LemmingList
+from scenario import Scenario
 from gui import Gui
 
 if sys.platform == 'win32' or sys.platform == 'win64':
@@ -16,16 +16,15 @@ if sys.platform == 'win32' or sys.platform == 'win64':
 
 pygame.init()
 resolution = (800, 600)
-
-character_list = ['Stop', 'Climb', 'Stairway', 'Bomb',
-                  'Dig down', 'Dig horiz.', 'Dig diag.', 'Parachute']
+character_list = ('Stop', 'Climb', 'Stairway', 'Bomb',
+                  'Dig down', 'Dig horiz.', 'Dig diag.', 'Parachute')
 
 pygame.display.set_caption('Lemmings')
 screen = pygame.display.set_mode(resolution)
 scenario = Scenario(screen, resolution)
 gui = Gui(resolution, screen, character_list)
-lemmingQuantity = 10
-lemmingList = LemmingList(lemmingQuantity, screen)
+lemming_quantity = 10
+lemming_list = LemmingList(lemming_quantity)
 
 stateDict = {'isActionSelected': False}
 done = False
@@ -33,7 +32,7 @@ reloj = pygame.time.Clock()
 t = reloj.get_time()
 
 status = 'drawing'
-# text = eztext.Input(maxlength=45, color=(100, 0, 0), prompt='Scenario name: ')
+text = eztext.Input(maxlength=45, color=(100, 0, 0), prompt='Scenario name: ')
 
 while not done:
     screen.fill((0, 0, 0))
@@ -100,21 +99,21 @@ while not done:
         if pygame.mouse.get_pressed()[0] == 1:
             position = pygame.mouse.get_pos()
             if not stateDict['isActionSelected']:
-                clicked_action = Interaction.is_button_pressed(position, gui.buttonList)
+                clicked_action = Interaction.is_button_pressed(position, gui.button_list)
                 if clicked_action is not None:
                     stateDict['isActionSelected'] = True
                     stateDict['action'] = clicked_action
             else:
-                clicked_lemming = Interaction.is_lemming_pressed(position, lemmingList.lista, stateDict)
+                clicked_lemming = Interaction.is_lemming_pressed(position, lemming_list.lista, stateDict)
                 if clicked_lemming is not None:
                     stateDict['isActionSelected'] = False
-        Interaction.camina_rect(lemmingList, scenario.floor_list)
+        Interaction.walking(lemming_list, scenario.floor_list)
         gui.draw()
-        lemmingList.draw(t, screen)
+        lemming_list.draw(t, screen)
 
     elif status == 'saving' and events != 0:
         if teclas[pygame.K_RETURN] or teclas[pygame.K_KP_ENTER]:
-            scenario.save(text.getInput())
+            scenario.save(text.get_input())
             status = 'playing'
 
         text.update(events)

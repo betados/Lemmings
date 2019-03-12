@@ -2,9 +2,9 @@
 
 """ Check the interaction between the elements in the game """
 from vector_2d import Vector
-from Scenario import Floor
+from scenario import Floor
 from typing import List, Tuple, Optional
-from Lemming import LemmingList
+from lemming import LemmingList
 
 V = 0.03
 COS45 = 0.71
@@ -14,7 +14,7 @@ class Interaction(object):
     """ static class in charge of checking interaction between different elements"""
 
     @staticmethod
-    def camina_rect(lemming_list: LemmingList, floor_list: List[Floor]):
+    def walking(lemming_list: LemmingList, floor_list: List[Floor]):
         """ look each lemming checking if it is touching a floor"""
         for lemming in lemming_list:
             if lemming.action in ('Walk', 'Bomb', 'Fall', 'Dig down', 'Dig horiz.', 'Dig diag.'):

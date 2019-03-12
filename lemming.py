@@ -8,15 +8,15 @@ import random
 import pygame
 from vector_2d import Vector
 from typing import List, Tuple, Optional
-from Scenario import Floor
+from scenario import Floor
 import warnings
 
 
 class LemmingList(object):
     """ This class contains and handles the list of lemmings"""
 
-    def __init__(self, quantity, screen):
-        self.lista = [Lemming(i, screen) for i in range(quantity)]
+    def __init__(self, quantity):
+        self.lista = [Lemming(i) for i in range(quantity)]
 
     def draw(self, t, screen):
         """ Atualize position and draw each lemming"""
@@ -37,8 +37,7 @@ class LemmingList(object):
 class Lemming(object):
     """ This class is the implementation of the lemmings sprites"""
 
-    def __init__(self, index: int, screen):
-        self.screen = screen
+    def __init__(self, index: int):
         self.index = index
         self.pos = Vector(60, index * -100)
         self.height = 32
